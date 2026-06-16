@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
+using SledSurfers.Scripts.Core;
 using SledSurfers.Scripts.Events;
 using SledSurfers.Scripts.Extensions;
+using SledSurfers.Scripts.Gameplay.Collectables;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -49,6 +51,9 @@ namespace SledSurfers.Scripts.Managers
             }
 
             await LoadLevelSceneAsync(targetScene);
+
+            //TODO: get markers in a more efficient way. If you are reading this it means I forgot to make it efficient :(
+            ServiceLocator.Get<CollectablePool>().Initialize(Object.FindObjectsOfType<CollectableMarker>(true));
         }
 
         private async Task LoadLevelSceneAsync(string sceneName)
