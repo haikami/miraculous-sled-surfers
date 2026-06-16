@@ -9,6 +9,9 @@ namespace SledSurfers.Scripts.Managers
     // Managers/LevelManager.cs
     public class LevelManager
     {
+        private const string GameCoreSceneName = "GameCore";
+        
+        
         private readonly GameStateChannel _gameStateChannel;
         private readonly LevelLoadedChannel _levelLoadedChannel;
 
@@ -16,6 +19,8 @@ namespace SledSurfers.Scripts.Managers
 
         // convention: level scenes named "Level_01", "Level_02", etc.
         private static string GetSceneName(int index) => $"Level_{index}";
+
+        private bool IsInitialLoad => string.IsNullOrWhiteSpace(_currentLevelScene);
 
         public LevelManager(
             GameStateChannel gameStateChannel,
@@ -28,8 +33,11 @@ namespace SledSurfers.Scripts.Managers
         public async Task LoadLevelAsync(int levelIndex)
         {
             var targetScene = GetSceneName(levelIndex);
-
-            if (!string.IsNullOrWhiteSpace(_currentLevelScene))
+            if (IsInitialLoad)
+            {
+                await SceneManager.LoadSceneAsync(GameCoreSceneName, LoadSceneMode.Additive).AsTask();
+            }
+            else
             {
                 if (_currentLevelScene == targetScene)
                 {
