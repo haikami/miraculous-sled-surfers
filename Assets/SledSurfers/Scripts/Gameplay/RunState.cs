@@ -2,6 +2,7 @@
 {
     public enum RunState
     {
+        None,
         Idle,
         Aiming,
         Released,

@@ -26,10 +26,10 @@ public class PlayerDummyController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            _rb.AddForce(transform.forward * _accelerationForce, ForceMode.Impulse);
-        }
+        // if (Input.GetMouseButtonDown(0))
+        // {
+        //     _rb.AddForce(transform.forward * _accelerationForce, ForceMode.Impulse);
+        // }
     }
 
     private void FixedUpdate()
