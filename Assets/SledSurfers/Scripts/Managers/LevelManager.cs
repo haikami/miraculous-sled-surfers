@@ -8,16 +8,12 @@ using Object = UnityEngine.Object;
 
 namespace SledSurfers.Scripts.Managers
 {
-    // Managers/LevelManager.cs
     public class LevelManager
     {
-        private const string GameCoreSceneName = "GameCore";
-
         public event Action OnLevelLoaded;
 
         private string _currentLevelScene;
-
-        // convention: level scenes named "Level_01", "Level_02", etc.
+        
         private static string GetSceneName(int index) => $"Level_{index}";
 
         private bool IsInitialLoad => string.IsNullOrWhiteSpace(_currentLevelScene);
@@ -25,11 +21,7 @@ namespace SledSurfers.Scripts.Managers
         public async Task LoadLevelAsync(int levelIndex)
         {
             var targetScene = GetSceneName(levelIndex);
-            if (IsInitialLoad)
-            {
-                await SceneManager.LoadSceneAsync(GameCoreSceneName, LoadSceneMode.Additive).AsTask();
-            }
-            else
+            if (!IsInitialLoad)
             {
                 if (_currentLevelScene == targetScene)
                 {
@@ -41,9 +33,6 @@ namespace SledSurfers.Scripts.Managers
             }
 
             await LoadLevelSceneAsync(targetScene);
-
-            //TODO: get markers in a more efficient way. If you are reading this it means I forgot to make it efficient :(
-            ServiceLocator.Get<CollectablePool>().Initialize(Object.FindObjectsOfType<CollectableMarker>(true));
         }
 
         private async Task LoadLevelSceneAsync(string sceneName)

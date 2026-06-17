@@ -7,20 +7,20 @@ namespace SledSurfers.Scripts.UI.Meta
 {
     public class MainMenuView : MonoBehaviour
     {
-        private readonly Lazy<GameManager> _gameManager = new(ServiceLocator.Get<GameManager>);
-        private GameManager GameManager => _gameManager.Value;
+        private readonly Lazy<GameStateManager> _gameManager = new(ServiceLocator.Get<GameStateManager>);
+        private GameStateManager GameStateManager => _gameManager.Value;
         
         private void Awake()
         {
-            GameManager.OnStateChanged += OnGameStateChanged;
-            OnGameStateChanged(GameManager.GameState);
+            GameStateManager.OnStateChanged += OnGameStateChanged;
+            OnGameStateChanged(GameStateManager.GameState);
         }
 
         private void OnDestroy()
         {
-            if (GameManager != null)
+            if (GameStateManager != null)
             {
-                GameManager.OnStateChanged -= OnGameStateChanged;
+                GameStateManager.OnStateChanged -= OnGameStateChanged;
             }
         }
 
@@ -41,6 +41,6 @@ namespace SledSurfers.Scripts.UI.Meta
 
 
         public void OnStartPressed()
-        => ServiceLocator.Get<GameManager>()?.StartGame();
+        => ServiceLocator.Get<GameStateManager>()?.StartGame();
     }
 }

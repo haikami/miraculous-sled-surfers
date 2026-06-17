@@ -7,8 +7,8 @@ namespace SledSurfers.Scripts.Managers
 {
     public class GameplayManager : MonoBehaviour
     {
-        private readonly Lazy<GameManager> _gameManager = new(ServiceLocator.Get<GameManager>);
-        private GameManager GameManager => _gameManager.Value;
+        private readonly Lazy<GameStateManager> _gameManager = new(ServiceLocator.Get<GameStateManager>);
+        private GameStateManager GameStateManager => _gameManager.Value;
         
         public event Action<RunState> OnRunStateChanged;
         public RunState RunState { get; private set; }
@@ -16,15 +16,15 @@ namespace SledSurfers.Scripts.Managers
         
         private void Awake()
         {
-            GameManager.OnStateChanged += OnGameStateChanged;
-            OnGameStateChanged(GameManager.GameState);
+            GameStateManager.OnStateChanged += OnGameStateChanged;
+            OnGameStateChanged(GameStateManager.GameState);
         }
 
         private void OnDestroy()
         {
-            if (GameManager != null)
+            if (GameStateManager != null)
             {
-                GameManager.OnStateChanged -= OnGameStateChanged;
+                GameStateManager.OnStateChanged -= OnGameStateChanged;
             }
         }
         

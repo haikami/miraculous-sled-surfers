@@ -12,6 +12,7 @@ namespace SledSurfers.Scripts.Core
     public class Bootstrap : MonoBehaviour
     {
         private const string MetaSceneName = "Meta";
+        private const string GameCoreSceneName = "GameCore";
         
         [SerializeField] private bool _loadFromServer; 
         [SerializeField] private LoadingScreen _loadingScreen;
@@ -37,13 +38,10 @@ namespace SledSurfers.Scripts.Core
         private void RegisterManagers()
         {
             var levelManager = new LevelManager();
-            var gameStateManager = new GameManager();
+            var gameStateManager = new GameStateManager();
             
             ServiceLocator.Register(levelManager);
             ServiceLocator.Register(gameStateManager);
-            //
-            // // audio etc — no channels needed at construction
-            // ServiceLocator.Register<AudioManager>(new AudioManager());
             
             var provider = BuildPlayerDataProvider();
             ServiceLocator.Register(new DataManager(provider));
@@ -69,9 +67,10 @@ namespace SledSurfers.Scripts.Core
         private async Task LoadScenes()
         {
             var levelManager = ServiceLocator.Get<LevelManager>();
-            int targetLevel  = ServiceLocator.Get<DataManager>().PlayerData.CurrentLevel;
+            var targetLevel  = ServiceLocator.Get<DataManager>().PlayerData.CurrentLevel;
             
             await SceneManager.LoadSceneAsync(MetaSceneName, LoadSceneMode.Additive).AsTask();
+            await SceneManager.LoadSceneAsync(GameCoreSceneName, LoadSceneMode.Additive).AsTask();
             await levelManager.LoadLevelAsync(targetLevel);
         }
     }

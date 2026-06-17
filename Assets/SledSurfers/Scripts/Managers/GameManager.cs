@@ -1,43 +1,52 @@
-using System;
-using SledSurfers.Scripts.Core;
+﻿using SledSurfers.Scripts.Core;
+using SledSurfers.Scripts.Gameplay.Level;
+using SledSurfers.Scripts.Player;
+using UnityEngine;
 
 namespace SledSurfers.Scripts.Managers
 {
-    public class GameManager : IInitializable, IDisposable
+    public class GameManager : MonoBehaviour
     {
-        public event Action<GameState> OnStateChanged;
-        public GameState GameState { get; private set; } = GameState.Loading;
+        [Header("References")]
+        [SerializeField] 
+        private CameraController _cameraController;
 
-        public void Initialize()
+        [SerializeField] 
+        private PlayerController _playerController;
+
+
+        private void Awake()
         {
-            if (ServiceLocator.TryGet(out LevelManager manager))
+            ServiceLocator.Get<LevelManager>().OnLevelLoaded += SetElements;
+
+            ServiceLocator.Get<GameStateManager>().OnStateChanged += OnGameStateChanged;
+        }
+
+        private void OnGameStateChanged(GameState gameState)
+        {
+            switch (gameState)
             {
-                manager.OnLevelLoaded += OnLevelLoaded;
+                case GameState.Playing:
+                {
+                    _cameraController.ToIdleView();
+                }
+                    break;
+                default:
+                    break;
             }
         }
 
-        public void StartGame()
+        private void SetElements()
         {
-            SwitchState(GameState.Playing);
-        }
-
-        private void OnLevelLoaded()
-        {
-            SwitchState(GameState.MainMenu);
-        }
-
-        private void SwitchState(GameState newState)
-        {
-            GameState = newState;
-            OnStateChanged?.Invoke(newState);
-        }
-        
-        public void Dispose()
-        {
-            if (ServiceLocator.TryGet(out LevelManager manager))
+            if (!ServiceLocator.TryGet(out LevelDefinition levelDefinition))
             {
-                manager.OnLevelLoaded -= OnLevelLoaded;
+                Debug.LogError("No level definition found, add one to level scene");
+                return;
             }
+
+            var spawnPoint = levelDefinition.PlayerSpawnPoint;
+            _cameraController.ToMainMenuView(spawnPoint);
+            _playerController.ResetPlayer(spawnPoint);
         }
     }
 }

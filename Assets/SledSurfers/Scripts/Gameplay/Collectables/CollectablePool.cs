@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using SledSurfers.Scripts.Core;
 using SledSurfers.Scripts.Data.Models;
+using SledSurfers.Scripts.Gameplay.Level;
+using SledSurfers.Scripts.Managers;
 using UnityEngine;
 
 namespace SledSurfers.Scripts.Gameplay.Collectables
@@ -17,11 +19,38 @@ namespace SledSurfers.Scripts.Gameplay.Collectables
         private readonly List<Collectable> _active = new();
         private readonly Queue<Collectable> _coinPool = new();
         private readonly Queue<Collectable> _gemPool = new();
-
+        
         private void Awake()
         {
             ServiceLocator.Register(this);
             InitializePools();
+            ServiceLocator.Get<LevelManager>().OnLevelLoaded += PlaceCollectables;
+        }
+
+        private void PlaceCollectables()
+        {
+            ReleaseAll();
+            
+            if (!ServiceLocator.TryGet(out LevelDefinition levelDefinition))
+            {
+                Debug.LogError("No level definition found, add one to level scene");
+                return;
+            }
+            
+            var collectables = levelDefinition.GetCollectableData();
+
+            foreach (var data in collectables)
+            {
+                if (!TryGetPool(data.currencyData.currencyType, out var pool))
+                {
+                    Debug.LogWarning($"[CollectablePool] Unsupported currency type: {data.currencyData.currencyType}");
+                    continue;
+                }
+
+                var collectable = Rent(pool, GetPrefab(data.currencyData.currencyType));
+                collectable.Initialize(data);
+                _active.Add(collectable);
+            }
         }
 
         private void OnDestroy()
@@ -45,26 +74,6 @@ namespace SledSurfers.Scripts.Gameplay.Collectables
                     var collectable = Rent(pool, prefab);
                     collectable.Deactivate();
                 }
-            }
-        }
-        
-        public void Initialize(IEnumerable<CollectableMarker> markers)
-        {
-            ReleaseAll();
-
-            foreach (var marker in markers)
-            {
-                var data = marker.GetCollectableData();
-
-                if (!TryGetPool(data.currencyData.currencyType, out var pool))
-                {
-                    Debug.LogWarning($"[CollectablePool] Unsupported currency type: {data.currencyData.currencyType}");
-                    continue;
-                }
-
-                var collectable = Rent(pool, GetPrefab(data.currencyData.currencyType));
-                collectable.Initialize(data);
-                _active.Add(collectable);
             }
         }
 
