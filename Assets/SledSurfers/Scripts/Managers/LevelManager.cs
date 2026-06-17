@@ -1,10 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using SledSurfers.Scripts.Core;
-using SledSurfers.Scripts.Events;
 using SledSurfers.Scripts.Extensions;
 using SledSurfers.Scripts.Gameplay.Collectables;
-using UnityEngine;
 using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 
 namespace SledSurfers.Scripts.Managers
 {
@@ -12,10 +12,8 @@ namespace SledSurfers.Scripts.Managers
     public class LevelManager
     {
         private const string GameCoreSceneName = "GameCore";
-        
-        
-        private readonly GameStateChannel _gameStateChannel;
-        private readonly LevelLoadedChannel _levelLoadedChannel;
+
+        public event Action OnLevelLoaded;
 
         private string _currentLevelScene;
 
@@ -23,15 +21,7 @@ namespace SledSurfers.Scripts.Managers
         private static string GetSceneName(int index) => $"Level_{index}";
 
         private bool IsInitialLoad => string.IsNullOrWhiteSpace(_currentLevelScene);
-
-        public LevelManager(
-            GameStateChannel gameStateChannel,
-            LevelLoadedChannel levelLoadedChannel)
-        {
-            _gameStateChannel    = gameStateChannel;
-            _levelLoadedChannel  = levelLoadedChannel;
-        }
-
+        
         public async Task LoadLevelAsync(int levelIndex)
         {
             var targetScene = GetSceneName(levelIndex);
@@ -60,7 +50,7 @@ namespace SledSurfers.Scripts.Managers
         {
             _currentLevelScene = sceneName;
             await SceneManager.LoadSceneAsync(_currentLevelScene, LoadSceneMode.Additive).AsTask();
-            _levelLoadedChannel.Raise();
+            OnLevelLoaded?.Invoke();
         }
 
         private async Task UnloadCurrentLevelAsync()
@@ -83,7 +73,7 @@ namespace SledSurfers.Scripts.Managers
             // }
             //
             // resetter.Reset();
-            _levelLoadedChannel.Raise();
+            OnLevelLoaded?.Invoke();
         }
     }
 }

@@ -41,6 +41,7 @@ namespace SledSurfers.Scripts.Core
             service = null;
             return false;
         }
+        
 
         public static void Unregister<T>() where T : class
         {

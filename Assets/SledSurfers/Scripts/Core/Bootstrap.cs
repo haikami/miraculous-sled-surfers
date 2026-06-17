@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using SledSurfers.Scripts.Data.Models;
 using SledSurfers.Scripts.Data.Providers;
-using SledSurfers.Scripts.Events;
 using SledSurfers.Scripts.Extensions;
 using SledSurfers.Scripts.Managers;
 using UnityEngine;
@@ -27,59 +25,32 @@ namespace SledSurfers.Scripts.Core
         {
             _loadingScreen.Show();
 
-            InitEvents();
-            InitManagers();
+            RegisterManagers();
 
             await FetchPlayerData();
             await LoadScenes();
 
             _loadingScreen.Hide();
         }
+        
 
-        private void InitEvents()
+        private void RegisterManagers()
         {
-            var gameStateChannel = new GameStateChannel();
-            var runChannel       = new RunChannel();
-            var currencyChannel  = new CurrencyChannel();
-            var levelChannel     = new LevelLoadedChannel();
-
-            // subscribers get interface only
-            ServiceLocator.Register<IChannel<GameState>>(gameStateChannel);
-            ServiceLocator.Register<IChannel<RunResultData>>(runChannel);
-            ServiceLocator.Register<IChannel<int>>(currencyChannel);
-            ServiceLocator.Register<IChannel>(levelChannel);
-
-            // owners get concrete — stored separately so locator never exposes Raise()
-            ServiceLocator.Register<GameStateChannel>(gameStateChannel);
-            ServiceLocator.Register<RunChannel>(runChannel);
-            ServiceLocator.Register<CurrencyChannel>(currencyChannel);
-            ServiceLocator.Register<LevelLoadedChannel>(levelChannel);
-        }
-
-        private void InitManagers()
-        {
-            // var gameStateManager = new GameStateManager(
-            //     ServiceLocator.Get<GameStateChannel>()
-            // );
-            // var currencyManager = new CurrencyManager(
-            //     ServiceLocator.Get<CurrencyChannel>()
-            // );
-            var levelManager = new LevelManager(
-                ServiceLocator.Get<GameStateChannel>(),
-                ServiceLocator.Get<LevelLoadedChannel>()
-            );
-            //
-            // ServiceLocator.Register<GameStateManager>(gameStateManager);
-            // ServiceLocator.Register<CurrencyManager>(currencyManager);
-            ServiceLocator.Register<LevelManager>(levelManager);
+            var levelManager = new LevelManager();
+            var gameStateManager = new GameManager();
+            
+            ServiceLocator.Register(levelManager);
+            ServiceLocator.Register(gameStateManager);
             //
             // // audio etc — no channels needed at construction
             // ServiceLocator.Register<AudioManager>(new AudioManager());
             
             var provider = BuildPlayerDataProvider();
-            var dataManager = new DataManager(provider);
-            ServiceLocator.Register<DataManager>(dataManager);
+            ServiceLocator.Register(new DataManager(provider));
+            
+            gameStateManager.Initialize();
         }
+        
 
         private async Task FetchPlayerData() => await ServiceLocator.Get<DataManager>().LoadAsync();
 

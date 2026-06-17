@@ -1,7 +1,10 @@
 ﻿namespace SledSurfers.Scripts.Core
 {
-    public class GameState
+    public enum GameState
     {
-        
+        Loading,
+        MainMenu,
+        Playing,
+        Results
     }
 }
