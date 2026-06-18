@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using SledSurfers.Scripts.Core;
 using SledSurfers.Scripts.Extensions;
-using SledSurfers.Scripts.Gameplay.Collectables;
 using UnityEngine.SceneManagement;
-using Object = UnityEngine.Object;
 
 namespace SledSurfers.Scripts.Managers
 {
@@ -48,20 +45,10 @@ namespace SledSurfers.Scripts.Managers
             _currentLevelScene = null;
         }
 
-        private void ResetCurrentLevel()
+        //TODO: cleanup whatever is needed
+        public void ResetCurrentLevel()
         {
             var scene   = SceneManager.GetSceneByName(_currentLevelScene);
-            // var resetter = scene.GetRootGameObjects()
-            //     .Select(go => go.GetComponent<LevelResetter>())
-            //     .FirstOrDefault(r => r != null);
-            //
-            // if (resetter == null)
-            // {
-            //     Debug.LogWarning($"[LevelManager] No LevelResetter found in {_currentLevelScene}");
-            //     return;
-            // }
-            //
-            // resetter.Reset();
             OnLevelLoaded?.Invoke();
         }
     }

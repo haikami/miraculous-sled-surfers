@@ -15,11 +15,11 @@ public class CameraController : MonoBehaviour
     
     private bool _following = false;
 
-    public void ToMainMenuView(Transform playerPosition)
+    public void ToMainMenuView(Transform playerSpawnPoint)
     {
         _following = false;
-        transform.position = playerPosition.position + _mainMenuOffset;
-        transform.LookAt(Target);
+        transform.position = playerSpawnPoint.position + _mainMenuOffset;
+        transform.LookAt(playerSpawnPoint);
     }
 
     public void ToIdleView()

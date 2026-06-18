@@ -7,5 +7,9 @@ namespace SledSurfers.Scripts.Player
         public void StartListening()
         {
         }
+
+        public void StopListening()
+        {
+        }
     }
 }

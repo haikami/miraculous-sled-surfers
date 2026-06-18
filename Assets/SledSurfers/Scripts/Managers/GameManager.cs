@@ -1,4 +1,6 @@
-﻿using SledSurfers.Scripts.Core;
+﻿using System;
+using SledSurfers.Scripts.Core;
+using SledSurfers.Scripts.Gameplay;
 using SledSurfers.Scripts.Gameplay.Level;
 using SledSurfers.Scripts.Player;
 using UnityEngine;
@@ -8,34 +10,48 @@ namespace SledSurfers.Scripts.Managers
     public class GameManager : MonoBehaviour
     {
         [Header("References")]
-        [SerializeField] 
-        private CameraController _cameraController;
-
-        [SerializeField] 
-        private PlayerManager _playerManager;
-
+        [SerializeField] private GameplayManager _gameplayManager;
+        [SerializeField] private CameraController _cameraController;
+        [SerializeField] private PlayerManager _playerManager;
+        
+        [Header("UI")] 
+        [SerializeField] private GameObject _playButton;
 
         private void Awake()
         {
-            ServiceLocator.Get<LevelManager>().OnLevelLoaded += SetElements;
-            ServiceLocator.Get<GameStateManager>().OnStateChanged += OnGameStateChanged;
+            ServiceLocator.Get<LevelManager>().OnLevelLoaded += OnLevelLoaded;
         }
 
-        private void OnGameStateChanged(GameState gameState)
+        private void OnEnable()
         {
-            switch (gameState)
+            _gameplayManager.OnGameFinished += FinishGame;
+        }
+
+        private void OnDisable()
+        {
+            _gameplayManager.OnGameFinished -= FinishGame;
+        }
+
+
+        public void StartGame()
+        {
+            _playButton.SetActive(false);
+            _gameplayManager.StartGame();
+        }
+
+        private void FinishGame(FinishReason reason)
+        {
+            if (reason == FinishReason.ReachedEnd)
             {
-                case GameState.Playing:
-                {
-                    _cameraController.ToIdleView();
-                }
-                    break;
-                default:
-                    break;
+                //TODO: implement me
+            }
+            else
+            {
+                ServiceLocator.Get<LevelManager>().ResetCurrentLevel();
             }
         }
 
-        private void SetElements()
+        private void OnLevelLoaded()
         {
             if (!ServiceLocator.TryGet(out LevelDefinition levelDefinition))
             {
@@ -46,6 +62,7 @@ namespace SledSurfers.Scripts.Managers
             var spawnPoint = levelDefinition.PlayerSpawnPoint;
             _cameraController.ToMainMenuView(spawnPoint);
             _playerManager.ResetPlayer(spawnPoint);
+            _playButton.SetActive(true);
         }
     }
 }

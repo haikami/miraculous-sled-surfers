@@ -13,11 +13,18 @@ namespace SledSurfers.Scripts.Player
         public float CurrentSpeed => _rigidbody.velocity.z;
 
         private bool _isRunning;
+
+        public void StopRunning()
+        {
+            _rigidbody.isKinematic = true;
+        }
         
         public void ResetPlayer(Transform spawnPoint)
         {
             _rigidbody.isKinematic = true;
             _rigidbody.position = spawnPoint.position;
+            transform.position = spawnPoint.position;
+            transform.rotation = spawnPoint.rotation;
             _isRunning = false;
         }
 

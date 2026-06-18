@@ -9,7 +9,10 @@ namespace SledSurfers.Scripts.Player
 
         public void StartListening()
         {
-            throw new NotImplementedException();
+        }
+
+        public void StopListening()
+        {
         }
     }
 }

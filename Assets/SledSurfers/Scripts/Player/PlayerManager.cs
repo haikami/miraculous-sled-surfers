@@ -18,7 +18,6 @@ namespace SledSurfers.Scripts.Player
         {
             _momentum.OnMomentumLost += HandleFinishLostMomentum;
             _collision.OnObstacleHit += HandleFinishObstacleHit;
-            // OnReachedEnd likely comes from a level trigger, not Player itself — separate concern
         }
 
         private void OnDisable()
@@ -37,18 +36,18 @@ namespace SledSurfers.Scripts.Player
         }
 
         public void SetPosition(Vector3 position) => transform.position = position;
-
-        public void ResetForNewRun(Vector3 spawnPosition)
-        {
-            // _controller.ResetPosition(spawnPosition);
-            // _tilt.StopListening();
-            // _momentum.StopTracking();
-            // _collision.StopListening();
-        }
-
+        
         private void HandleFinishLostMomentum() => HandleFinish(FinishReason.LostMomentum);
         private void HandleFinishObstacleHit() => HandleFinish(FinishReason.Crashed);
-        private void HandleFinish(FinishReason reason) => OnRunEnded?.Invoke(reason);
+        private void HandleFinish(FinishReason reason)
+        {
+            _movement.StopListening();
+            _momentum.StopTracking();
+            _tilt.StopListening();
+            _collision.StopListening();
+            _controller.StopRunning();
+            OnRunEnded?.Invoke(reason);
+        }
 
         public void ResetPlayer(Transform spawnPoint) => _controller.ResetPlayer(spawnPoint);
     }

@@ -41,6 +41,6 @@ namespace SledSurfers.Scripts.UI.Meta
 
 
         public void OnStartPressed()
-        => ServiceLocator.Get<GameStateManager>()?.StartGame();
+        => ServiceLocator.Get<GameManager>()?.StartGame();
     }
 }
