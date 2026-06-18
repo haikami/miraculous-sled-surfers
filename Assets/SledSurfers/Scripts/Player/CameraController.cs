@@ -4,14 +4,14 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private PlayerController _playerController;
+    [SerializeField] private Transform _playerTransform;
     
     [Header("Settings")]
     [SerializeField] Vector3 _idleOffset = new Vector3(0, 4, -8);
     [SerializeField] Vector3 _mainMenuOffset = new Vector3(0, 4, 8);
     [SerializeField] float _smoothSpeed = 5f;
     
-    private Transform Target => _playerController.transform;
+    private Transform Target => _playerTransform.transform;
     
     private bool _following = false;
 
@@ -29,7 +29,7 @@ public class CameraController : MonoBehaviour
         transform.LookAt(Target);
     }
 
-    public void ToFollowing()
+    public void StartFollowing()
     {
         _following = true;
     }

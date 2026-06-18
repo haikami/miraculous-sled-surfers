@@ -12,7 +12,7 @@ namespace SledSurfers.Scripts.Managers
         private CameraController _cameraController;
 
         [SerializeField] 
-        private PlayerController _playerController;
+        private PlayerManager _playerManager;
 
 
         private void Awake()
@@ -45,7 +45,7 @@ namespace SledSurfers.Scripts.Managers
 
             var spawnPoint = levelDefinition.PlayerSpawnPoint;
             _cameraController.ToMainMenuView(spawnPoint);
-            _playerController.ResetPlayer(spawnPoint);
+            _playerManager.ResetPlayer(spawnPoint);
         }
     }
 }

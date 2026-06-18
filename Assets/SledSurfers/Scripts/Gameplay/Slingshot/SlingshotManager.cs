@@ -9,12 +9,12 @@ namespace SledSurfers.Scripts.Gameplay.Slingshot
 {
     public class SlingshotManager : MonoBehaviour
     {
-        public event Action OnReleased;
+        public event Action<Vector3> OnReleased;
         public event Action OnAimingCancelled;
         
         
         [Header("References")]
-        [SerializeField] private PlayerController _playerController;
+        [SerializeField] private PlayerManager _playerManager;
         [SerializeField] private DragInputDetector _input;
         
         [Header("Settings")]
@@ -53,7 +53,7 @@ namespace SledSurfers.Scripts.Gameplay.Slingshot
         {
             var worldDelta = ScreenToWorldDelta(screenPos);
             var clamped = ClampToSlingshotBounds(worldDelta);
-            _playerController.transform.position = _anchorPoint.position + clamped;
+            _playerManager.SetPosition(_anchorPoint.position + clamped);
         }
 
         private void HandleDragReleased(Vector2 screenPos)
@@ -70,7 +70,7 @@ namespace SledSurfers.Scripts.Gameplay.Slingshot
             if (minimumForceReached)
             {
                 StopAiming();
-                ApplyLaunch(launchDirection, launchForce);    
+                OnReleased?.Invoke(launchDirection * launchForce);    
             }
             else
             {
@@ -90,12 +90,6 @@ namespace SledSurfers.Scripts.Gameplay.Slingshot
             var lateral = Mathf.Clamp(delta.x, -_maxLateralOffset, _maxLateralOffset);
             var pullBack = Mathf.Clamp(delta.z, -_maxReach, 0f); // assuming forward is +Z, only allow pulling back
             return new Vector3(lateral, 0f, pullBack);
-        }
-
-        private void ApplyLaunch(Vector3 direction, float force)
-        {
-            OnReleased?.Invoke();
-            _playerController.Launch(direction, force);
         }
     }
 }

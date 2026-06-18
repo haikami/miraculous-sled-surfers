@@ -1,5 +1,6 @@
 ﻿using System;
 using SledSurfers.Scripts.Core;
+using SledSurfers.Scripts.Gameplay;
 using SledSurfers.Scripts.Gameplay.Slingshot;
 using SledSurfers.Scripts.Player;
 using UnityEngine;
@@ -10,7 +11,7 @@ namespace SledSurfers.Scripts.Managers
     {
         [Header("References")] 
         [SerializeField] private SlingshotManager _slingshotManager;
-        [SerializeField] private PlayerController _playerController;
+        [SerializeField] private PlayerManager _playerManager;
         [SerializeField] private CameraController _cameraController;
         
         
@@ -26,19 +27,31 @@ namespace SledSurfers.Scripts.Managers
         
         private void OnEnable()
         {
-            _slingshotManager.OnReleased += HandleSlingshotReleased;
+            _slingshotManager.OnReleased += OnSlingshotReleased;
+            _playerManager.OnRunEnded += OnRunEnded;
         }
 
-        private void HandleSlingshotReleased()
+        
+        private void OnDisable()
         {
-            _cameraController.ToFollowing();
+            _slingshotManager.OnReleased -= OnSlingshotReleased;
+            _playerManager.OnRunEnded -= OnRunEnded;
+        }
+        
+        private void OnRunEnded(FinishReason finishReason)
+        {
+            
+        }
+
+
+        private void OnSlingshotReleased(Vector3 force)
+        {
+            _cameraController.StartFollowing();
+            _playerManager.Launch(force);
             // _tiltController.StartListening();
         }
 
-        private void OnDisable()
-        {
-            _slingshotManager.OnReleased -= HandleSlingshotReleased;
-        }
+
 
         private void OnDestroy()
         {
@@ -49,7 +62,7 @@ namespace SledSurfers.Scripts.Managers
         }
         
 
-        private void ToIdle()
+        private void StartGame()
         {
             _slingshotManager.BeginAiming();
         }
@@ -64,7 +77,7 @@ namespace SledSurfers.Scripts.Managers
         {
             if (newState == GameState.Playing)
             {
-                ToIdle();
+                StartGame();
             }
             else
             {
