@@ -780,9 +780,10 @@ GameObject:
   - component: {fileID: 1133623486}
   - component: {fileID: 1133623485}
   - component: {fileID: 1133623489}
-  - component: {fileID: 1133623488}
   - component: {fileID: 1133623487}
   - component: {fileID: 1133623490}
+  - component: {fileID: 1133623488}
+  - component: {fileID: 1133623491}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -932,8 +933,9 @@ MonoBehaviour:
   _controller: {fileID: 1133623485}
   _movement: {fileID: 1133623487}
   _tilt: {fileID: 1133623490}
-  _momentum: {fileID: 1133623488}
   _collision: {fileID: 1133623489}
+  _momentumTracker: {fileID: 1133623488}
+  _distanceTracker: {fileID: 1133623491}
 --- !u!114 &1133623487
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -989,6 +991,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3d3311fc7e2d40fc9d2029d9579118dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1133623491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1133623478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb49553e2ca54d6c8dd0c2448831fbb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1136593754
