@@ -13,5 +13,11 @@ namespace SledSurfers.Scripts.Player
             _rigidbody.isKinematic = true;
             _rigidbody.position = spawnPoint.position;
         }
+
+        public void Launch(Vector3 direction, float force)
+        {
+            _rigidbody.isKinematic = false;
+            _rigidbody.AddForce(direction * force, ForceMode.Impulse);
+        }
     }
 }

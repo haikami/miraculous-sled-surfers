@@ -249,6 +249,55 @@ MonoBehaviour:
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
   m_ScrollDeltaPerTick: 6
+--- !u!1 &803127702
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 803127704}
+  - component: {fileID: 803127703}
+  m_Layer: 0
+  m_Name: Slingshot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &803127703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803127702}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd11767d2860451e95f2e42c364c8537, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerController: {fileID: 1133623485}
+  _input: {fileID: 1494066949}
+  _maxReach: 2
+  _maxLateralOffset: 1
+  _launchForceMultiplier: 30
+--- !u!4 &803127704
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803127702}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.6, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -354,10 +403,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db12b5a4f54bb9148b4e0171e751c1d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 1133623479}
-  offset: {x: 0, y: 4, z: -8}
-  _idleoffset: {x: 0, y: 4, z: 8}
-  smoothSpeed: 5
+  _playerController: {fileID: 1133623485}
+  _idleOffset: {x: 0, y: 4, z: -8}
+  _mainMenuOffset: {x: 0, y: 4, z: 8}
+  _smoothSpeed: 5
 --- !u!1 &1133623478
 GameObject:
   m_ObjectHideFlags: 0
@@ -367,11 +416,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1133623479}
+  - component: {fileID: 1133623485}
   - component: {fileID: 1133623483}
   - component: {fileID: 1133623482}
   - component: {fileID: 1133623481}
   - component: {fileID: 1133623480}
-  - component: {fileID: 1133623485}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -515,8 +564,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1252716803}
   - component: {fileID: 1252716802}
+  - component: {fileID: 1252716804}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: Managers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -546,6 +596,65 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1252716804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1252716801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3b80d55162842f487aee5e062e62353, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _slingshotManager: {fileID: 803127703}
+  _playerController: {fileID: 1133623485}
+  _cameraController: {fileID: 963194229}
+--- !u!1 &1494066948
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1494066950}
+  - component: {fileID: 1494066949}
+  m_Layer: 0
+  m_Name: Input
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1494066949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494066948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbb9ff3b11854c7ebad1e4819c6563f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1494066950
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494066948}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -656,9 +765,11 @@ RectTransform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 963194228}
   - {fileID: 367128948}
   - {fileID: 1560037427}
+  - {fileID: 1494066950}
   - {fileID: 1252716803}
   - {fileID: 1133623479}
-  - {fileID: 963194228}
+  - {fileID: 803127704}
   - {fileID: 66322176}

@@ -1,23 +1,43 @@
 ﻿using System;
 using SledSurfers.Scripts.Core;
-using SledSurfers.Scripts.Gameplay;
+using SledSurfers.Scripts.Gameplay.Slingshot;
+using SledSurfers.Scripts.Player;
 using UnityEngine;
 
 namespace SledSurfers.Scripts.Managers
 {
     public class GameplayManager : MonoBehaviour
     {
+        [Header("References")] 
+        [SerializeField] private SlingshotManager _slingshotManager;
+        [SerializeField] private PlayerController _playerController;
+        [SerializeField] private CameraController _cameraController;
+        
+        
         private readonly Lazy<GameStateManager> _gameManager = new(ServiceLocator.Get<GameStateManager>);
         private GameStateManager GameStateManager => _gameManager.Value;
-        
-        public event Action<RunState> OnRunStateChanged;
-        public RunState RunState { get; private set; }
         
         
         private void Awake()
         {
             GameStateManager.OnStateChanged += OnGameStateChanged;
             OnGameStateChanged(GameStateManager.GameState);
+        }
+        
+        private void OnEnable()
+        {
+            _slingshotManager.OnReleased += HandleSlingshotReleased;
+        }
+
+        private void HandleSlingshotReleased()
+        {
+            _cameraController.ToFollowing();
+            // _tiltController.StartListening();
+        }
+
+        private void OnDisable()
+        {
+            _slingshotManager.OnReleased -= HandleSlingshotReleased;
         }
 
         private void OnDestroy()
@@ -28,22 +48,29 @@ namespace SledSurfers.Scripts.Managers
             }
         }
         
-        private void SwitchState(RunState newState)
+
+        private void ToIdle()
         {
-            RunState = newState;
-            OnRunStateChanged?.Invoke(newState);
+            _slingshotManager.BeginAiming();
         }
 
+        
+        private void ToNone()
+        {
+            _slingshotManager.StopAiming();
+        }
+        
         private void OnGameStateChanged(GameState newState)
         {
             if (newState == GameState.Playing)
             {
-                SwitchState(RunState.Idle);
+                ToIdle();
             }
             else
             {
-                SwitchState(RunState.None);
+                ToNone();
             }
         }
+
     }
 }

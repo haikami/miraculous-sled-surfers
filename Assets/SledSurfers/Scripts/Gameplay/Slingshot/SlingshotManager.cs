@@ -1,27 +1,47 @@
 ﻿
+using System;
+using SledSurfers.Scripts.Core;
+using SledSurfers.Scripts.Gameplay.Level;
+using SledSurfers.Scripts.Player;
 using UnityEngine;
 
 namespace SledSurfers.Scripts.Gameplay.Slingshot
 {
     public class SlingshotManager : MonoBehaviour
     {
+        public event Action OnReleased;
+        public event Action OnAimingCancelled;
+        
+        
+        [Header("References")]
+        [SerializeField] private PlayerController _playerController;
         [SerializeField] private DragInputDetector _input;
-        [SerializeField] private Transform _anchorPoint;
-        [SerializeField] private Transform _playerVisual;
+        
+        [Header("Settings")]
         [SerializeField] private float _maxReach = 2f;
         [SerializeField] private float _maxLateralOffset = 1f;
         [SerializeField] private float _launchForceMultiplier = 10f;
 
+        private Transform _anchorPoint;
         private Camera _camera;
         private Vector2 _dragStartScreenPos;
 
         public void BeginAiming()
         {
+            _anchorPoint = ServiceLocator.Get<LevelDefinition>()?.PlayerSpawnPoint;
             _camera = Camera.main;
             _input.OnDragStarted += HandleDragStarted;
             _input.OnDragged += HandleDragged;
             _input.OnDragReleased += HandleDragReleased;
             _input.Enable();
+        }
+        
+        public void StopAiming()
+        {
+            _input.Disable();
+            _input.OnDragStarted -= HandleDragStarted;
+            _input.OnDragged -= HandleDragged;
+            _input.OnDragReleased -= HandleDragReleased;
         }
 
         private void HandleDragStarted(Vector2 screenPos)
@@ -33,7 +53,7 @@ namespace SledSurfers.Scripts.Gameplay.Slingshot
         {
             var worldDelta = ScreenToWorldDelta(screenPos);
             var clamped = ClampToSlingshotBounds(worldDelta);
-            _playerVisual.position = _anchorPoint.position + clamped;
+            _playerController.transform.position = _anchorPoint.position + clamped;
         }
 
         private void HandleDragReleased(Vector2 screenPos)
@@ -45,8 +65,17 @@ namespace SledSurfers.Scripts.Gameplay.Slingshot
             var launchDirection = -clamped.normalized;
             var launchForce = clamped.magnitude * _launchForceMultiplier;
 
-            StopAiming();
-            ApplyLaunch(launchDirection, launchForce);
+            var minimumForceReached = true;
+
+            if (minimumForceReached)
+            {
+                StopAiming();
+                ApplyLaunch(launchDirection, launchForce);    
+            }
+            else
+            {
+                OnAimingCancelled?.Invoke();
+            }
         }
 
         private Vector3 ScreenToWorldDelta(Vector2 screenPos)
@@ -63,17 +92,10 @@ namespace SledSurfers.Scripts.Gameplay.Slingshot
             return new Vector3(lateral, 0f, pullBack);
         }
 
-        private void StopAiming()
-        {
-            _input.Disable();
-            _input.OnDragStarted -= HandleDragStarted;
-            _input.OnDragged -= HandleDragged;
-            _input.OnDragReleased -= HandleDragReleased;
-        }
-
         private void ApplyLaunch(Vector3 direction, float force)
         {
-            //ServiceLocator.Get<PlayerController>().Launch(direction, force);
+            OnReleased?.Invoke();
+            _playerController.Launch(direction, force);
         }
     }
 }

@@ -2,6 +2,7 @@
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
 using System;
+using SledSurfers.Scripts.Core;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
 public class DragInputDetector : MonoBehaviour
@@ -13,6 +14,16 @@ public class DragInputDetector : MonoBehaviour
     private bool _isEnabled;
     private bool _isDragging;
     private Vector2 _lastPosition;
+
+    private void Awake()
+    {
+        ServiceLocator.Register(this);
+    }
+
+    private void OnDestroy()
+    {
+        ServiceLocator.Unregister<DragInputDetector>();
+    }
 
     private void OnEnable()
     {
