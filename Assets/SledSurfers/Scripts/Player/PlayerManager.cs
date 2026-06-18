@@ -34,7 +34,7 @@ namespace SledSurfers.Scripts.Player
         {
             _controller.Launch(force);
             _movement.StartListening();
-            _tilt.StartListening();
+            _tilt.StartRunning();
             _collision.StartListening();
             
             _momentumTracker.StartTracking();
@@ -48,7 +48,7 @@ namespace SledSurfers.Scripts.Player
         private void HandleFinish(FinishReason reason)
         {
             _movement.StopListening();
-            _tilt.StopListening();
+            _tilt.StopRunning();
             _collision.StopListening();
             _controller.StopRunning();
             

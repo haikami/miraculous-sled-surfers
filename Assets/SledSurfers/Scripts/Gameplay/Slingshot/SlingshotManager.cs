@@ -1,6 +1,6 @@
-﻿
-using System;
+﻿using System;
 using SledSurfers.Scripts.Core;
+using SledSurfers.Scripts.Gameplay.Input;
 using SledSurfers.Scripts.Gameplay.Level;
 using SledSurfers.Scripts.Player;
 using UnityEngine;
@@ -11,12 +11,11 @@ namespace SledSurfers.Scripts.Gameplay.Slingshot
     {
         public event Action<Vector3> OnReleased;
         public event Action OnAimingCancelled;
-        
-        
+
         [Header("References")]
         [SerializeField] private PlayerManager _playerManager;
         [SerializeField] private DragInputDetector _input;
-        
+
         [Header("Settings")]
         [SerializeField] private float _maxReach = 2f;
         [SerializeField] private float _maxLateralOffset = 1f;
@@ -24,7 +23,6 @@ namespace SledSurfers.Scripts.Gameplay.Slingshot
 
         private Transform _anchorPoint;
         private Camera _camera;
-        private Vector2 _dragStartScreenPos;
 
         public void BeginAiming()
         {
@@ -35,7 +33,7 @@ namespace SledSurfers.Scripts.Gameplay.Slingshot
             _input.OnDragReleased += HandleDragReleased;
             _input.Enable();
         }
-        
+
         public void StopAiming()
         {
             _input.Disable();
@@ -46,22 +44,22 @@ namespace SledSurfers.Scripts.Gameplay.Slingshot
 
         private void HandleDragStarted(Vector2 screenPos)
         {
-            _dragStartScreenPos = screenPos;
+            // anchor point in screen space for reference if needed, but
+            // offset computation is now owned by DragInputDetector
         }
 
-        private void HandleDragged(Vector2 screenPos)
+        private void HandleDragged(Vector2 screenOffset)
         {
-            var worldDelta = ScreenToWorldDelta(screenPos);
+            var worldDelta = ScreenOffsetToWorldDelta(screenOffset);
             var clamped = ClampToSlingshotBounds(worldDelta);
             _playerManager.SetPosition(_anchorPoint.position + clamped);
         }
 
-        private void HandleDragReleased(Vector2 screenPos)
+        private void HandleDragReleased(Vector2 screenOffset)
         {
-            var worldDelta = ScreenToWorldDelta(screenPos);
+            var worldDelta = ScreenOffsetToWorldDelta(screenOffset);
             var clamped = ClampToSlingshotBounds(worldDelta);
 
-            // pull-back direction is opposite to where you dragged, like a real slingshot
             var launchDirection = -clamped.normalized;
             var launchForce = clamped.magnitude * _launchForceMultiplier;
 
@@ -70,7 +68,7 @@ namespace SledSurfers.Scripts.Gameplay.Slingshot
             if (minimumForceReached)
             {
                 StopAiming();
-                OnReleased?.Invoke(launchDirection * launchForce);    
+                OnReleased?.Invoke(launchDirection * launchForce);
             }
             else
             {
@@ -78,17 +76,20 @@ namespace SledSurfers.Scripts.Gameplay.Slingshot
             }
         }
 
-        private Vector3 ScreenToWorldDelta(Vector2 screenPos)
+        private Vector3 ScreenOffsetToWorldDelta(Vector2 screenOffset)
         {
-            var startWorld = _camera.ScreenToWorldPoint(new Vector3(_dragStartScreenPos.x, _dragStartScreenPos.y, _camera.nearClipPlane + 10f));
-            var currentWorld = _camera.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, _camera.nearClipPlane + 10f));
-            return currentWorld - startWorld;
+            // convert a screen-space pixel offset to a world-space delta
+            // by comparing world position of screen center vs screen center + offset
+            var screenCenter = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, _camera.nearClipPlane + 10f);
+            var screenCenterWorld = _camera.ScreenToWorldPoint(screenCenter);
+            var offsetWorld = _camera.ScreenToWorldPoint(screenCenter + new Vector3(screenOffset.x, screenOffset.y, 0f));
+            return offsetWorld - screenCenterWorld;
         }
 
         private Vector3 ClampToSlingshotBounds(Vector3 delta)
         {
             var lateral = Mathf.Clamp(delta.x, -_maxLateralOffset, _maxLateralOffset);
-            var pullBack = Mathf.Clamp(delta.z, -_maxReach, 0f); // assuming forward is +Z, only allow pulling back
+            var pullBack = Mathf.Clamp(delta.z, -_maxReach, 0f);
             return new Vector3(lateral, 0f, pullBack);
         }
     }

@@ -1,118 +1,95 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
-using System;
-using SledSurfers.Scripts.Core;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
-public class DragInputDetector : MonoBehaviour
+namespace SledSurfers.Scripts.Gameplay.Input
 {
-    public event Action<Vector2> OnDragStarted;
-    public event Action<Vector2> OnDragged;
-    public event Action<Vector2> OnDragReleased;
-
-    private bool _isEnabled;
-    private bool _isDragging;
-    private Vector2 _lastPosition;
-
-    private void Awake()
+    public class DragInputDetector : MonoBehaviour
     {
-        ServiceLocator.Register(this);
-    }
+        public event Action<Vector2> OnDragStarted;
+        public event Action<Vector2> OnDragged;      
+        public event Action<Vector2> OnDragReleased; 
 
-    private void OnDestroy()
-    {
-        ServiceLocator.Unregister<DragInputDetector>();
-    }
+        private bool _isEnabled;
+        private bool _isDragging;
+        private Vector2 _lastPosition;
+        private Vector2 _startPosition;
 
-    private void OnEnable()
-    {
-        EnhancedTouchSupport.Enable();
-    }
+        private void OnEnable() => EnhancedTouchSupport.Enable();
+        private void OnDisable() => EnhancedTouchSupport.Disable();
 
-    private void OnDisable()
-    {
-        EnhancedTouchSupport.Disable();
-    }
+        public void Enable() => _isEnabled = true;
 
-    public void Enable() => _isEnabled = true;
-
-    public void Disable()
-    {
-        _isEnabled = false;
-        if (_isDragging)
-            EndDrag(_lastPosition);
-    }
-
-    private void Update()
-    {
-        if (!_isEnabled) return;
-
-        if (Touch.activeTouches.Count > 0)
+        public void Disable()
         {
-            HandleTouch(Touch.activeTouches[0]);
+            _isEnabled = false;
+            if (_isDragging)
+                EndDrag(_lastPosition);
         }
-        else
+
+        private void Update()
         {
-            HandleMouse();
+            if (!_isEnabled) return;
+
+            if (Touch.activeTouches.Count > 0)
+                HandleTouch(Touch.activeTouches[0]);
+            else
+                HandleMouse();
         }
-    }
 
-    private void HandleMouse()
-    {
-        var mouse = Mouse.current;
-        if (mouse == null) return;
-
-        var position = mouse.position.ReadValue();
-
-        if (mouse.leftButton.wasPressedThisFrame)
+        private void HandleMouse()
         {
-            BeginDrag(position);
+            var mouse = Mouse.current;
+            if (mouse == null) return;
+
+            var position = mouse.position.ReadValue();
+
+            if (mouse.leftButton.wasPressedThisFrame)
+                BeginDrag(position);
+            else if (mouse.leftButton.isPressed && _isDragging)
+                UpdateDrag(position);
+            else if (mouse.leftButton.wasReleasedThisFrame && _isDragging)
+                EndDrag(position);
         }
-        else if (mouse.leftButton.isPressed && _isDragging)
+
+        private void HandleTouch(Touch touch)
         {
-            UpdateDrag(position);
+            switch (touch.phase)
+            {
+                case UnityEngine.InputSystem.TouchPhase.Began:
+                    BeginDrag(touch.screenPosition);
+                    break;
+                case UnityEngine.InputSystem.TouchPhase.Moved:
+                case UnityEngine.InputSystem.TouchPhase.Stationary:
+                    if (_isDragging) UpdateDrag(touch.screenPosition);
+                    break;
+                case UnityEngine.InputSystem.TouchPhase.Ended:
+                case UnityEngine.InputSystem.TouchPhase.Canceled:
+                    if (_isDragging) EndDrag(touch.screenPosition);
+                    break;
+            }
         }
-        else if (mouse.leftButton.wasReleasedThisFrame && _isDragging)
+
+        private void BeginDrag(Vector2 position)
         {
-            EndDrag(position);
+            _isDragging = true;
+            _startPosition = position;
+            _lastPosition = position;
+            OnDragStarted?.Invoke(position);
         }
-    }
 
-    private void HandleTouch(Touch touch)
-    {
-        switch (touch.phase)
+        private void UpdateDrag(Vector2 position)
         {
-            case UnityEngine.InputSystem.TouchPhase.Began:
-                BeginDrag(touch.screenPosition);
-                break;
-            case UnityEngine.InputSystem.TouchPhase.Moved:
-            case UnityEngine.InputSystem.TouchPhase.Stationary:
-                if (_isDragging) UpdateDrag(touch.screenPosition);
-                break;
-            case UnityEngine.InputSystem.TouchPhase.Ended:
-            case UnityEngine.InputSystem.TouchPhase.Canceled:
-                if (_isDragging) EndDrag(touch.screenPosition);
-                break;
+            _lastPosition = position;
+            OnDragged?.Invoke(position - _startPosition);
         }
-    }
 
-    private void BeginDrag(Vector2 position)
-    {
-        _isDragging = true;
-        _lastPosition = position;
-        OnDragStarted?.Invoke(position);
-    }
-
-    private void UpdateDrag(Vector2 position)
-    {
-        _lastPosition = position;
-        OnDragged?.Invoke(position);
-    }
-
-    private void EndDrag(Vector2 position)
-    {
-        _isDragging = false;
-        OnDragReleased?.Invoke(position);
+        private void EndDrag(Vector2 position)
+        {
+            _isDragging = false;
+            OnDragReleased?.Invoke(position - _startPosition);
+        }
     }
 }

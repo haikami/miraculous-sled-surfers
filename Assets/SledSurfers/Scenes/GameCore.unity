@@ -993,6 +993,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d3311fc7e2d40fc9d2029d9579118dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _rigidbody: {fileID: 1133623480}
+  _input: {fileID: 1494066949}
+  _baseLateralForce: 5
+  _maxLateralSpeed: 3
+  _maxDragDistance: 200
 --- !u!114 &1133623491
 MonoBehaviour:
   m_ObjectHideFlags: 0
