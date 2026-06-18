@@ -18,7 +18,6 @@ namespace SledSurfers.Scripts.Managers
         private void Awake()
         {
             ServiceLocator.Get<LevelManager>().OnLevelLoaded += SetElements;
-
             ServiceLocator.Get<GameStateManager>().OnStateChanged += OnGameStateChanged;
         }
 
