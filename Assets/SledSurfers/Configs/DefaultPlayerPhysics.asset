@@ -18,5 +18,5 @@ MonoBehaviour:
   _baseLateralForce: 5
   _maxLateralSpeed: 3
   _maxDragDistance: 200
-  _baseLaunchForceMultiplier: 20
+  _baseLaunchForceMultiplier: 60
   _minimumSpeedThreshold: 1.5

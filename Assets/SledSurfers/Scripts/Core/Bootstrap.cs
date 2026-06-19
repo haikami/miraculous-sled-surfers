@@ -11,7 +11,6 @@ namespace SledSurfers.Scripts.Core
     
     public class Bootstrap : MonoBehaviour
     {
-        private const string MetaSceneName = "Meta";
         private const string GameCoreSceneName = "GameCore";
         
         [SerializeField] private bool _loadFromServer; 
@@ -69,7 +68,6 @@ namespace SledSurfers.Scripts.Core
             var levelManager = ServiceLocator.Get<LevelManager>();
             var targetLevel  = ServiceLocator.Get<DataManager>().PlayerData.CurrentLevel;
             
-            await SceneManager.LoadSceneAsync(MetaSceneName, LoadSceneMode.Additive).AsTask();
             await SceneManager.LoadSceneAsync(GameCoreSceneName, LoadSceneMode.Additive).AsTask();
             await levelManager.LoadLevelAsync(targetLevel);
         }

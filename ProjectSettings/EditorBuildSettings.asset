@@ -9,9 +9,6 @@ EditorBuildSettings:
     path: Assets/SledSurfers/Scenes/Preload.unity
     guid: b4fbb5faeffa80e4a977390c5acbb101
   - enabled: 1
-    path: Assets/SledSurfers/Scenes/Meta.unity
-    guid: 00163deb48ae4734f87f06a5cfaf0d84
-  - enabled: 1
     path: Assets/SledSurfers/Scenes/GameCore.unity
     guid: df4d5cde99ee02d4a988fb96f8ff9525
   - enabled: 1
