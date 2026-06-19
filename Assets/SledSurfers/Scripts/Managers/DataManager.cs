@@ -24,5 +24,13 @@ namespace SledSurfers.Scripts.Managers
         {
             return _provider.SaveAsync(PlayerData);
         }
+        
+        public void UpdateMaxDistanceIfHigher(int distance)
+        {
+            if (distance <= PlayerData.maxDistanceReached) return;
+            
+            PlayerData.maxDistanceReached = distance;
+            SaveAsync();
+        }
     }
 }

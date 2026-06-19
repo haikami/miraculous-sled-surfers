@@ -5,8 +5,7 @@ namespace SledSurfers.Scripts.Data.Models
     public enum CurrencyType
     {
         Coins,
-        Gems,
-        Tickets
+        Gems
     }
     
     [Serializable]

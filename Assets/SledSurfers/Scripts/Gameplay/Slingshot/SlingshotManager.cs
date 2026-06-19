@@ -46,7 +46,6 @@ namespace SledSurfers.Scripts.Gameplay.Slingshot
             _playerManager.SetPosition(_anchorPoint.position + clamped);
 
             var percentage = CalculatePullPercentage(clamped);
-            Debug.Log("Pull: "+Mathf.RoundToInt(percentage*100f)+"%");
             OnPullPercentageChanged?.Invoke(percentage);
         }
 

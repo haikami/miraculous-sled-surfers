@@ -16,9 +16,12 @@ namespace SledSurfers.Scripts.Managers
         
         [Header("UI")] 
         [SerializeField] private GameObject _playButton;
+        
+        private DataManager _dataManager;
 
         private void Awake()
         {
+            _dataManager = ServiceLocator.Get<DataManager>();
             ServiceLocator.Get<LevelManager>().OnLevelLoaded += OnLevelLoaded;
         }
 
@@ -41,6 +44,7 @@ namespace SledSurfers.Scripts.Managers
 
         private void FinishGame(FinishReason reason)
         {
+            _dataManager.SaveAsync();
             if (reason == FinishReason.ReachedEnd)
             {
                 //TODO: implement me

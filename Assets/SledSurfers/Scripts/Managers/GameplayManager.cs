@@ -1,4 +1,6 @@
 ﻿using System;
+using SledSurfers.Scripts.Core;
+using SledSurfers.Scripts.Data.Models;
 using SledSurfers.Scripts.Gameplay;
 using SledSurfers.Scripts.Gameplay.Slingshot;
 using SledSurfers.Scripts.Gameplay.UI;
@@ -32,9 +34,13 @@ namespace SledSurfers.Scripts.Managers
             _playerManager.OnRunEnded -= OnRunEnded;
         }
         
-        private void OnRunEnded(FinishReason finishReason)
+        private void OnRunEnded(RunResultData runResultData)
         {
-            _resultScreen.Show(()=> OnGameFinished?.Invoke(finishReason));
+            _resultScreen.Show(runResultData, ()=>
+            {
+                ServiceLocator.Get<CurrencyManager>().Add(runResultData.currencies);
+                OnGameFinished?.Invoke(runResultData.reason);
+            });
         }
 
         private void OnSlingshotReleased(Vector3 direction, float forcePercentage)

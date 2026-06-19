@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SledSurfers.Scripts.Gameplay;
 
 namespace SledSurfers.Scripts.Data.Models
@@ -8,8 +9,6 @@ namespace SledSurfers.Scripts.Data.Models
     {
         public FinishReason reason;
         public int distanceTraveled;
-        public CurrencyData[] collectedCurrencies;
-        public int score;
-        public int distance;
+        public Dictionary<CurrencyType, int> currencies;
     }
 }

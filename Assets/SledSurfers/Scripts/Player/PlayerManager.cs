@@ -1,13 +1,15 @@
 ﻿using System;
+using SledSurfers.Scripts.Data.Models;
 using SledSurfers.Scripts.Data.ScriptableObjects;
 using SledSurfers.Scripts.Gameplay;
+using SledSurfers.Scripts.Gameplay.Utils;
 using UnityEngine;
 
 namespace SledSurfers.Scripts.Player
 {
     public class PlayerManager : MonoBehaviour
     {
-        public event Action<FinishReason> OnRunEnded;
+        public event Action<RunResultData> OnRunEnded;
 
         [Header("Config")] 
         [SerializeField] private PlayerPhysicsConfig _config;
@@ -48,9 +50,9 @@ namespace SledSurfers.Scripts.Player
 
         public void SetPosition(Vector3 position) => transform.position = position;
         
-        private void HandleFinishLostMomentum() => HandleFinish(FinishReason.LostMomentum);
-        private void HandleFinishObstacleHit() => HandleFinish(FinishReason.Crashed);
-        private void HandleFinish(FinishReason reason)
+        private void HandleFinishLostMomentum() => HandleLevelFailed(FinishReason.LostMomentum);
+        private void HandleFinishObstacleHit() => HandleLevelFailed(FinishReason.Crashed);
+        private void HandleLevelFailed(FinishReason reason)
         {
             _movement.StopListening();
             _tilt.StopRunning();
@@ -59,8 +61,14 @@ namespace SledSurfers.Scripts.Player
             
             _momentumTracker.StopTracking();
             _distanceTracker.StopTracking();
-            
-            OnRunEnded?.Invoke(reason);
+
+            var distanceTraveled = Mathf.RoundToInt(_distanceTracker.CurrentDistance);
+            OnRunEnded?.Invoke(new RunResultData
+            {
+                reason = reason,
+                distanceTraveled = distanceTraveled,
+                currencies = PlayerLevelRewardsCalculator.GetLevelFailedRewards(distanceTraveled),
+            });
         }
 
         public void SetupPlayer(Transform spawnPoint)

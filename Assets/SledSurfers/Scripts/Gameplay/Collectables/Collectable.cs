@@ -1,5 +1,7 @@
-﻿using SledSurfers.Scripts.Core;
+﻿using System;
+using SledSurfers.Scripts.Core;
 using SledSurfers.Scripts.Data.Models;
+using SledSurfers.Scripts.Managers;
 using UnityEngine;
 
 namespace SledSurfers.Scripts.Gameplay.Collectables
@@ -10,6 +12,13 @@ namespace SledSurfers.Scripts.Gameplay.Collectables
 
         private ICollectableOwner _owner;
         private CurrencyData _currencyData;
+
+        private CurrencyManager _currencyManager;
+
+        private void Awake()
+        {
+            _currencyManager = ServiceLocator.Get<CurrencyManager>();
+        }
 
         public void Initialize(CollectableData data)
         {
@@ -27,9 +36,9 @@ namespace SledSurfers.Scripts.Gameplay.Collectables
         private void OnTriggerEnter(Collider other)
         {
             if (!other.CompareTag("Player")) return;
-
-            // ServiceLocator.Get<CurrencyManager>().Add(_currencyData);
+            
             _owner.Return(this);
+            _currencyManager?.Add(_currencyData);
         }
     }
 }

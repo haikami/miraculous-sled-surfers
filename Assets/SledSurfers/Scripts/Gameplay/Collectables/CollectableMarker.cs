@@ -10,12 +10,6 @@ namespace SledSurfers.Scripts.Gameplay.Collectables
         [SerializeField] private CurrencyType _currencyType;
         [SerializeField] private int _currencyAmount = 1;
 
-        private void Awake()
-        {
-            //Avoid showing marker if it has any visuals
-            gameObject.SetActive(false);
-        }
-
         public CollectableData GetCollectableData()
             => new CollectableData
             {
@@ -27,12 +21,10 @@ namespace SledSurfers.Scripts.Gameplay.Collectables
                 spawnPosition = transform.position
             };
         
-#if UNITY_EDITOR
         private static readonly Dictionary<CurrencyType, Color> _gizmoColors = new()
         {
             { CurrencyType.Coins, Color.yellow },
             { CurrencyType.Gems,  Color.cyan   },
-            { CurrencyType.Tickets, Color.green },
         };
         
         private void OnDrawGizmos()
@@ -41,17 +33,11 @@ namespace SledSurfers.Scripts.Gameplay.Collectables
 
             Gizmos.color = color;
             Gizmos.DrawSphere(transform.position, 0.5f);
-            //TODO: replace spheres by icons
-            // Gizmos.DrawIcon(transform.position, "coin_icon.png", allowScaling: true);
-
-
-            // draw amount label above it
-            UnityEditor.Handles.color = color;
             UnityEditor.Handles.Label(
                 transform.position + Vector3.up * 0.5f,
                 $"{_currencyType} x{_currencyAmount}"
             );
         }
-#endif
+
     }
 }

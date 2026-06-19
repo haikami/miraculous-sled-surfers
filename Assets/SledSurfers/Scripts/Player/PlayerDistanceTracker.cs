@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace SledSurfers.Scripts.Player
 {
@@ -38,8 +37,6 @@ namespace SledSurfers.Scripts.Player
                 Vector3.Dot(flatDelta, flatForward) > 0f
                     ? flatDelta.magnitude
                     : 0f;
-                
-            Debug.Log("Distance: "+CurrentDistance);
         }
     }
 }

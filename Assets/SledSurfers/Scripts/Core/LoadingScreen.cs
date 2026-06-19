@@ -4,7 +4,14 @@ namespace SledSurfers.Scripts.Core
 {
     public class LoadingScreen : MonoBehaviour
     {
-        public void Show() => gameObject.SetActive(true);
-        public void Hide() => gameObject.SetActive(false);
+        [SerializeField] private GameObject _visual;
+        
+        private void OnDestroy()
+        {
+            ServiceLocator.Unregister<LoadingScreen>();
+        }
+
+        public void Show() => _visual.SetActive(true);
+        public void Hide() => _visual.SetActive(false);
     }
 }

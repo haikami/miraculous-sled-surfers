@@ -13,8 +13,8 @@ namespace SledSurfers.Scripts.Core
     {
         private const string GameCoreSceneName = "GameCore";
         
-        [SerializeField] private bool _loadFromServer; 
         [SerializeField] private LoadingScreen _loadingScreen;
+        [SerializeField] private bool _loadFromServer; 
 
         private async void Awake()
         {
@@ -24,18 +24,22 @@ namespace SledSurfers.Scripts.Core
         private async Task Run()
         {
             _loadingScreen.Show();
-
-            RegisterManagers();
-
+            RegisterServices();
+            await SceneManager.LoadSceneAsync(GameCoreSceneName, LoadSceneMode.Additive).AsTask();
+            ServiceLocator.Get<LoadingScreen>()?.Show();
             await FetchPlayerData();
             await LoadScenes();
-
             _loadingScreen.Hide();
+
+            SceneManager.UnloadSceneAsync(gameObject.scene);
         }
         
 
-        private void RegisterManagers()
+        private void RegisterServices()
         {
+            DontDestroyOnLoad(_loadingScreen);
+            ServiceLocator.Register(_loadingScreen);
+            
             var levelManager = new LevelManager();
             var gameStateManager = new GameStateManager();
             
@@ -43,7 +47,11 @@ namespace SledSurfers.Scripts.Core
             ServiceLocator.Register(gameStateManager);
             
             var provider = BuildPlayerDataProvider();
-            ServiceLocator.Register(new DataManager(provider));
+            var dataManager = new DataManager(provider);
+            ServiceLocator.Register(dataManager);
+
+            var currencyManager = new CurrencyManager(dataManager);
+            ServiceLocator.Register(currencyManager);
             
             gameStateManager.Initialize();
         }
@@ -66,9 +74,8 @@ namespace SledSurfers.Scripts.Core
         private async Task LoadScenes()
         {
             var levelManager = ServiceLocator.Get<LevelManager>();
-            var targetLevel  = ServiceLocator.Get<DataManager>().PlayerData.CurrentLevel;
+            var targetLevel  = ServiceLocator.Get<DataManager>().PlayerData.currentLevel;
             
-            await SceneManager.LoadSceneAsync(GameCoreSceneName, LoadSceneMode.Additive).AsTask();
             await levelManager.LoadLevelAsync(targetLevel);
         }
     }
