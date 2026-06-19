@@ -8,7 +8,7 @@ namespace SledSurfers.Scripts.Data.Models
     {
         public int currentLevel;
         public int maxDistanceReached;
-        public Dictionary<CurrencyType, int> PersistentCurrencies = new();
-        public Dictionary<CurrencyType, int> LevelCurrencies = new();
+        public List<CurrencyData> persistentCurrencies = new();
+        public List<CurrencyData> levelCurrencies = new();
     }
 }

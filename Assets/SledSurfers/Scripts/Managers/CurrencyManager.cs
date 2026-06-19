@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using SledSurfers.Scripts.Data.Models;
+using SledSurfers.Scripts.Utils.Extensions;
 using UnityEngine;
 
 namespace SledSurfers.Scripts.Managers
@@ -37,41 +38,43 @@ namespace SledSurfers.Scripts.Managers
             {
                 return false;
             }
-            
+
             Add(currencyType, -amount);
             return true;
         }
-        
+
         public void Add(CurrencyData data) => Add(data.currencyType, data.amount);
+
         public void Add(CurrencyType currencyType, int amount)
         {
             var currencySource = GetCurrencySource(currencyType);
-            var currentAmount = currencySource.GetValueOrDefault(currencyType);
-            currencySource[currencyType] = Mathf.Max(0, currentAmount + amount);
-            OnCurrencyChanged?.Invoke(currencyType, currencySource[currencyType]);
-            Debug.Log($"Currency  {currencyType} upodated: {currencySource[currencyType]}");
+            var currentAmount = currencySource.GetAmount(currencyType);
+            var newAmount = Mathf.Max(0, currentAmount + amount);
+            currencySource.SetAmount(currencyType, newAmount);
+            OnCurrencyChanged?.Invoke(currencyType, newAmount);
+            Debug.Log($"Currency {currencyType} updated: {newAmount}");
         }
 
         public int GetAmount(CurrencyType type)
         {
-            return GetCurrencySource(type).GetValueOrDefault(type);
+            return GetCurrencySource(type).GetAmount(type);
         }
 
         public void ResetLevelCurrencies()
         {
-            var removedCurrencies = _dataManager.PlayerData.LevelCurrencies.Keys;
+            var removedCurrencies = _dataManager.PlayerData.levelCurrencies;
             foreach (var currency in removedCurrencies)
             {
-                OnCurrencyChanged?.Invoke(currency, 0); 
+                OnCurrencyChanged?.Invoke(currency.currencyType, 0);
             }
-            
-            _dataManager.PlayerData.LevelCurrencies.Clear();
+
+            _dataManager.PlayerData.levelCurrencies.Clear();
         }
 
-        private Dictionary<CurrencyType, int> GetCurrencySource(CurrencyType type) => type switch
+        private List<CurrencyData> GetCurrencySource(CurrencyType type) => type switch
         {
-            CurrencyType.Coins => _dataManager.PlayerData.LevelCurrencies,
-            CurrencyType.Gems => _dataManager.PlayerData.PersistentCurrencies,
+            CurrencyType.Coins => _dataManager.PlayerData.levelCurrencies,
+            CurrencyType.Gems => _dataManager.PlayerData.persistentCurrencies,
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
     }

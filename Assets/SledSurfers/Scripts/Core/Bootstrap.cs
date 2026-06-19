@@ -25,10 +25,9 @@ namespace SledSurfers.Scripts.Core
         {
             _loadingScreen.Show();
             RegisterServices();
-            await SceneManager.LoadSceneAsync(GameCoreSceneName, LoadSceneMode.Additive).AsTask();
-            ServiceLocator.Get<LoadingScreen>()?.Show();
             await FetchPlayerData();
-            await LoadScenes();
+            await SceneManager.LoadSceneAsync(GameCoreSceneName, LoadSceneMode.Additive).AsTask();
+            await LoadCurrentLevel();
             _loadingScreen.Hide();
 
             SceneManager.UnloadSceneAsync(gameObject.scene);
@@ -71,7 +70,7 @@ namespace SledSurfers.Scripts.Core
             return new PlayerDataProviderWithFallback(server, local);
         }
 
-        private async Task LoadScenes()
+        private async Task LoadCurrentLevel()
         {
             var levelManager = ServiceLocator.Get<LevelManager>();
             var targetLevel  = ServiceLocator.Get<DataManager>().PlayerData.currentLevel;

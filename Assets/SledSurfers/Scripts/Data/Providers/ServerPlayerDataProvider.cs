@@ -28,11 +28,11 @@ namespace SledSurfers.Scripts.Data.Providers
             await Task.CompletedTask;
         }
 
+        
         private async Task<PlayerData> FetchFromServerAsync(CancellationToken ct)
         {
-            // your actual API call here, passing ct
-            await Task.Delay(100, ct); // placeholder
-            return new PlayerData();
+            await Task.Delay(100, ct);
+            throw new TimeoutException();
         }
     }
 }
