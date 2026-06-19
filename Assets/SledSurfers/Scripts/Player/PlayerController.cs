@@ -1,18 +1,18 @@
 ﻿using System;
+using SledSurfers.Scripts.Data.ScriptableObjects;
 using UnityEngine;
 
 namespace SledSurfers.Scripts.Player
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : MonoBehaviour, IPlayerConfigSetter
     {
         [Header("References")]
         [SerializeField] private Rigidbody _rigidbody;
-
-        [Header("Settings")] [SerializeField] private float _minAllowedVelocity; 
         
         public float CurrentSpeed => _rigidbody.velocity.z;
 
-        private bool _isRunning;
+        private float _baseLaunchForceMultiplier;
+        private float LaunchForceMultiplier => _baseLaunchForceMultiplier;
 
         public void StopRunning()
         {
@@ -25,14 +25,20 @@ namespace SledSurfers.Scripts.Player
             _rigidbody.position = spawnPoint.position;
             transform.position = spawnPoint.position;
             transform.rotation = spawnPoint.rotation;
-            _isRunning = false;
         }
 
-        public void Launch(Vector3 force)
+        public void Launch(Vector3 direction, float forcePercentage)
         {
             _rigidbody.isKinematic = false;
-            _rigidbody.AddForce(force, ForceMode.Impulse);
-            _isRunning = true;
+            _rigidbody.AddForce(direction * (forcePercentage * LaunchForceMultiplier), ForceMode.Impulse);
+        }
+
+        public void SetConfig(PlayerPhysicsConfig config)
+        {
+            _rigidbody.mass = config.Mass;
+            _rigidbody.drag = config.LinearDrag;
+            _rigidbody.angularDrag = config.AngularDrag;
+            _baseLaunchForceMultiplier = config.BaseLaunchForceMultiplier;
         }
     }
 }

@@ -280,9 +280,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerManager: {fileID: 1133623486}
   _input: {fileID: 1494066949}
-  _maxReach: 2
-  _maxLateralOffset: 1
-  _launchForceMultiplier: 30
+  _config: {fileID: 11400000, guid: db7d40a8bc463d94cac1d59b29c84301, type: 2}
 --- !u!4 &803127704
 Transform:
   m_ObjectHideFlags: 0
@@ -917,7 +915,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 1133623480}
-  _minAllowedVelocity: 0
 --- !u!114 &1133623486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -930,6 +927,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dda8ac462d44401ac97881403c85963, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _config: {fileID: 11400000, guid: da98ea37d960c2d41b030af86b8c837f, type: 2}
   _controller: {fileID: 1133623485}
   _movement: {fileID: 1133623487}
   _tilt: {fileID: 1133623490}
@@ -968,7 +966,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 1133623480}
-  _minimumSpeedThreshold: 1.5
 --- !u!114 &1133623489
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -995,9 +992,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 1133623480}
   _input: {fileID: 1494066949}
-  _baseLateralForce: 5
-  _maxLateralSpeed: 3
-  _maxDragDistance: 200
 --- !u!114 &1133623491
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -37,10 +37,10 @@ namespace SledSurfers.Scripts.Managers
             _resultScreen.Show(()=> OnGameFinished?.Invoke(finishReason));
         }
 
-        private void OnSlingshotReleased(Vector3 force)
+        private void OnSlingshotReleased(Vector3 direction, float forcePercentage)
         {
             _cameraController.StartFollowing();
-            _playerManager.Launch(force);
+            _playerManager.Launch(direction, forcePercentage);
             // _tiltController.StartListening();
         }
         

@@ -1,4 +1,5 @@
 ﻿using System;
+using SledSurfers.Scripts.Data.ScriptableObjects;
 using SledSurfers.Scripts.Gameplay;
 using UnityEngine;
 
@@ -8,6 +9,10 @@ namespace SledSurfers.Scripts.Player
     {
         public event Action<FinishReason> OnRunEnded;
 
+        [Header("Config")] 
+        [SerializeField] private PlayerPhysicsConfig _config;
+        
+        [Header("Subsystems")]
         [SerializeField] private PlayerController _controller;
         [SerializeField] private PlayerMovementController _movement;
         [SerializeField] private PlayerTiltController _tilt;
@@ -30,9 +35,9 @@ namespace SledSurfers.Scripts.Player
             _collision.OnObstacleHit -= HandleFinishObstacleHit;
         }
         
-        public void Launch(Vector3 force)
+        public void Launch(Vector3 direction, float forcePercentage)
         {
-            _controller.Launch(force);
+            _controller.Launch(direction, forcePercentage);
             _movement.StartListening();
             _tilt.StartRunning();
             _collision.StartListening();
@@ -58,10 +63,18 @@ namespace SledSurfers.Scripts.Player
             OnRunEnded?.Invoke(reason);
         }
 
-        public void ResetPlayer(Transform spawnPoint)
+        public void SetupPlayer(Transform spawnPoint)
         {
             _distanceTracker.SetStartPoint(spawnPoint);
             _controller.ResetPlayer(spawnPoint);
+            ApplyConfig(_config);
+        }
+
+        private void ApplyConfig(PlayerPhysicsConfig config)
+        {
+            _tilt.SetConfig(config);
+            _controller.SetConfig(config);
+            _momentumTracker.SetConfig(config);
         }
     }
 }

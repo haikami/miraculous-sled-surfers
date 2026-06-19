@@ -61,7 +61,7 @@ namespace SledSurfers.Scripts.Managers
 
             var spawnPoint = levelDefinition.PlayerSpawnPoint;
             _cameraController.ToMainMenuView(spawnPoint);
-            _playerManager.ResetPlayer(spawnPoint);
+            _playerManager.SetupPlayer(spawnPoint);
             _playButton.SetActive(true);
         }
     }

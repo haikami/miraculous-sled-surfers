@@ -1,18 +1,19 @@
-﻿using UnityEngine;
+﻿using SledSurfers.Scripts.Data.ScriptableObjects;
+using UnityEngine;
 using SledSurfers.Scripts.Gameplay.Input;
 
 namespace SledSurfers.Scripts.Player
 {
-    public class PlayerTiltController : MonoBehaviour
+    public class PlayerTiltController : MonoBehaviour, IPlayerConfigSetter
     {
         [Header("References")]
         [SerializeField] private Rigidbody _rigidbody;
         [SerializeField] private DragInputDetector _input;
 
-        [Header("Settings")]
-        [SerializeField] private float _baseLateralForce = 5f;
-        [SerializeField] private float _maxLateralSpeed = 3f;
-        [SerializeField] private float _maxDragDistance = 200f;
+        
+        private float _baseLateralForce = 5f;
+        private float _maxLateralSpeed = 3f;
+        private float _maxDragDistance = 200f;
 
         private float _lateralForceMultiplier = 1f;
         private float _normalizedX;
@@ -66,6 +67,13 @@ namespace SledSurfers.Scripts.Player
                 var force = transform.right * (_normalizedX * _baseLateralForce * _lateralForceMultiplier);
                 _rigidbody.AddForce(force, ForceMode.Force);
             }
+        }
+
+        public void SetConfig(PlayerPhysicsConfig config)
+        {
+            _baseLateralForce = config.BaseLateralForce;
+            _maxLateralSpeed = config.MaxLateralSpeed;
+            _maxDragDistance = config.MaxDragDistance;
         }
     }
 }
