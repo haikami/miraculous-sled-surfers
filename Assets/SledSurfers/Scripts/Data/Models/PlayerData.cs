@@ -10,5 +10,6 @@ namespace SledSurfers.Scripts.Data.Models
         public int maxDistanceReached;
         public List<CurrencyData> persistentCurrencies = new();
         public List<CurrencyData> levelCurrencies = new();
+        public List<UpgradeSaveData> upgrades = new();
     }
 }

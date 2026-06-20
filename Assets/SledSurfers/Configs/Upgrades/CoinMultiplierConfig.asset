@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c7beb7cb0b1450f8ad02363c42b9956, type: 3}
+  m_Name: CoinMultiplierConfig
+  m_EditorClassIdentifier: 
+  _upgradeType: 0
+  _name: Income
+  _icon: {fileID: 0}
+  _color: {r: 1, g: 0.6941545, b: 0, a: 1}
+  _levelsPerMilestone: 5
+  _initialValue: 1
+  _levels:
+  - cost: 100
+    value: 1.2
+  - cost: 200
+    value: 1.4
+  - cost: 300
+    value: 1.6
+  - cost: 400
+    value: 1.8
+  - cost: 600
+    value: 2
+  - cost: 1200
+    value: 2.2
+  - cost: 2000
+    value: 2.4
+  - cost: 3000
+    value: 2.6
+  - cost: 4000
+    value: 2.8
+  - cost: 10000
+    value: 4
+  _displayValueFormat: x{0:0.#}

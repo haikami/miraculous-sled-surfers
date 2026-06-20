@@ -19,7 +19,7 @@ namespace SledSurfers.Scripts.Managers
         [SerializeField] private CameraController _cameraController;
         
         [Header("UI")] 
-        [SerializeField] private ResultScreen _resultScreen;
+        [SerializeField] private ResultView _resultView;
         
         private void OnEnable()
         {
@@ -36,7 +36,7 @@ namespace SledSurfers.Scripts.Managers
         
         private void OnRunEnded(RunResultData runResultData)
         {
-            _resultScreen.Show(runResultData, ()=>
+            _resultView.Show(runResultData, ()=>
             {
                 ServiceLocator.Get<CurrencyManager>().Add(runResultData.currencies);
                 OnGameFinished?.Invoke(runResultData.reason);

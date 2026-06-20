@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using SledSurfers.Scripts.Data.Models;
 using SledSurfers.Scripts.Data.Providers;
+using SledSurfers.Scripts.Meta.Upgrades;
 
 namespace SledSurfers.Scripts.Managers
 {
@@ -31,6 +32,21 @@ namespace SledSurfers.Scripts.Managers
             
             PlayerData.maxDistanceReached = distance;
             SaveAsync();
+        }
+
+        public int GetUpgradeLevel(UpgradeType upgradeType) => PlayerData.upgrades.Find(x => x.upgradeType == upgradeType)?.level ?? 0;
+
+        public void IncreaseUpgradeLevel(UpgradeType upgradeType)
+        {
+            var currentUpgradeData = PlayerData.upgrades.Find(x => x.upgradeType == upgradeType);
+            if (currentUpgradeData == null)
+            {
+                PlayerData.upgrades.Add(new UpgradeSaveData() {  upgradeType = upgradeType, level = 1 });
+            }
+            else
+            {
+                currentUpgradeData.level++;
+            }
         }
     }
 }

@@ -1,8 +1,11 @@
 ﻿using System;
+using SledSurfers.Scripts.Core;
 using SledSurfers.Scripts.Data.Models;
 using SledSurfers.Scripts.Data.ScriptableObjects;
 using SledSurfers.Scripts.Gameplay;
 using SledSurfers.Scripts.Gameplay.Utils;
+using SledSurfers.Scripts.Managers;
+using SledSurfers.Scripts.Meta.Upgrades;
 using UnityEngine;
 
 namespace SledSurfers.Scripts.Player
@@ -67,7 +70,9 @@ namespace SledSurfers.Scripts.Player
             {
                 reason = reason,
                 distanceTraveled = distanceTraveled,
-                currencies = PlayerLevelRewardsCalculator.GetLevelFailedRewards(distanceTraveled),
+                currencies = PlayerLevelRewardsCalculator.GetLevelFailedRewards(
+                    distanceTraveled,
+                    ServiceLocator.Get<UpgradesManager>().GetUpgradeCurrentValueOrDefault(UpgradeType.CoinMultiplier, 1f)),
             });
         }
 

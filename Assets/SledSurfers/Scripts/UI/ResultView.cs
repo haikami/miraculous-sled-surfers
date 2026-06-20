@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace SledSurfers.Scripts.Gameplay.UI
 {
-    public class ResultScreen : MonoBehaviour
+    public class ResultView : MonoBehaviour
     {
         [Header("References")]
         [SerializeField] private  TextMeshProUGUI _distance;
@@ -22,6 +22,7 @@ namespace SledSurfers.Scripts.Gameplay.UI
         {
             _onClosed = onClose;
             
+            _distance.text = $"Distance: {resultData.distanceTraveled}m";
             SetupCurrencies(resultData.currencies);
             
             gameObject.SetActive(true);

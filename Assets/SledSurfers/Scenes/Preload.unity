@@ -151,6 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2484ce3981c54c57a94df1ca888a1391, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _upgradeListConfig: {fileID: 11400000, guid: 73883866615de0e4c9e4185649e7332c, type: 2}
   _loadingScreen: {fileID: 1853134592}
   _loadFromServer: 1
 --- !u!4 &49298221

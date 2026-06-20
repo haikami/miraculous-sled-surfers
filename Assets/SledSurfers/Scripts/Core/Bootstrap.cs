@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using SledSurfers.Scripts.Data.Providers;
+using SledSurfers.Scripts.Data.ScriptableObjects;
 using SledSurfers.Scripts.Extensions;
 using SledSurfers.Scripts.Managers;
 using UnityEngine;
@@ -13,7 +14,13 @@ namespace SledSurfers.Scripts.Core
     {
         private const string GameCoreSceneName = "GameCore";
         
+        [Header("Configs")]
+        [SerializeField] private UpgradeListConfig _upgradeListConfig;
+        
+        [Header("References")]
         [SerializeField] private LoadingScreen _loadingScreen;
+        
+        [Header("Debug")]
         [SerializeField] private bool _loadFromServer; 
 
         private async void Awake()
@@ -24,6 +31,8 @@ namespace SledSurfers.Scripts.Core
         private async Task Run()
         {
             _loadingScreen.Show();
+            DontDestroyOnLoad(_loadingScreen);
+            
             RegisterServices();
             await FetchPlayerData();
             await SceneManager.LoadSceneAsync(GameCoreSceneName, LoadSceneMode.Additive).AsTask();
@@ -36,13 +45,12 @@ namespace SledSurfers.Scripts.Core
 
         private void RegisterServices()
         {
-            DontDestroyOnLoad(_loadingScreen);
             ServiceLocator.Register(_loadingScreen);
             
             var levelManager = new LevelManager();
-            var gameStateManager = new GameStateManager();
-            
             ServiceLocator.Register(levelManager);
+            
+            var gameStateManager = new GameStateManager();
             ServiceLocator.Register(gameStateManager);
             
             var provider = BuildPlayerDataProvider();
@@ -51,6 +59,9 @@ namespace SledSurfers.Scripts.Core
 
             var currencyManager = new CurrencyManager(dataManager);
             ServiceLocator.Register(currencyManager);
+
+            var upgradesManager = new UpgradesManager(_upgradeListConfig, currencyManager, dataManager);
+            ServiceLocator.Register(upgradesManager);
             
             gameStateManager.Initialize();
         }

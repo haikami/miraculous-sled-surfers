@@ -31,6 +31,9 @@ namespace SledSurfers.Scripts.Managers
                 Add(currency.Key, currency.Value);
             }
         }
+        
+        public bool CanAfford(CurrencyType currencyType, int amount)
+        => amount <= 0 || GetAmount(currencyType) >= amount;
 
         public bool TrySpend(CurrencyType currencyType, int amount)
         {
