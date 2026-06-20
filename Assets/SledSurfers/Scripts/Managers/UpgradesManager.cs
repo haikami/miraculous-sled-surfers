@@ -48,8 +48,8 @@ namespace SledSurfers.Scripts.Managers
 
         public float GetUpgradeCurrentValue(UpgradeConfig upgradeConfig)
         {
-            var upgradeLevel = GetUpgradeCurrentLevel(upgradeConfig.UpgradeType);
-            return upgradeConfig.GetUpgradeValue(upgradeLevel);
+            var currentLevel = GetUpgradeCurrentLevel(upgradeConfig.UpgradeType);
+            return upgradeConfig.GetUpgradeValue(currentLevel - 1);
         }
         
         public UpgradeCostInfo GetUpgradeCostInfo(UpgradeType upgradeType)
@@ -112,11 +112,13 @@ namespace SledSurfers.Scripts.Managers
         public bool TryUpgrade(UpgradeType upgradeType)
         {
             var upgradeCostInfo = GetUpgradeCostInfo(upgradeType);
-            if (upgradeCostInfo.isMaxLevel || !upgradeCostInfo.canAfford || !_currencyManager.TrySpend(upgradeCostInfo.currencyType, upgradeCostInfo.upgradeCost))
+            if (upgradeCostInfo.isMaxLevel || !upgradeCostInfo.canAfford || !_currencyManager.CanAfford(upgradeCostInfo.currencyType, upgradeCostInfo.upgradeCost))
             {
                 return false;
             }
+
             _dataManager.IncreaseUpgradeLevel(upgradeType);
+            _currencyManager.TrySpend(upgradeCostInfo.currencyType, upgradeCostInfo.upgradeCost);
             _dataManager.SaveAsync();
             return true;
         }

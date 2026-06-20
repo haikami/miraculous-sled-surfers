@@ -32,7 +32,7 @@ namespace SledSurfers.Scripts.Data.ScriptableObjects
         public bool IsMaxLevel(int level) => level >= NumLevels - 1;
         
         public float GetUpgradeValue(int level)
-        => level <= 0 || NumLevels == 0 ? _initialValue : level < NumLevels ? _levels[level].value : _levels[^1].value;
+        => level < 0 || NumLevels == 0 ? _initialValue : level < NumLevels ? _levels[level].value : _levels[^1].value;
 
         public int GetUpgradeCost(int level)
             => level > 0 && level < NumLevels ? _levels[level].cost : 0;
