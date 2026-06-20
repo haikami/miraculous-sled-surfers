@@ -154,6 +154,8 @@ MonoBehaviour:
   _upgradeListConfig: {fileID: 11400000, guid: 73883866615de0e4c9e4185649e7332c, type: 2}
   _loadingScreen: {fileID: 1853134592}
   _loadFromServer: 1
+  _enableCheats: 1
+  _cheatsMenuInstance: {fileID: 8714175883036865669, guid: 73bffec0aa9ca6849ab94613524e5aeb, type: 3}
 --- !u!4 &49298221
 Transform:
   m_ObjectHideFlags: 0

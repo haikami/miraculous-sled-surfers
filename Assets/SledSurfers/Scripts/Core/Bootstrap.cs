@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using SledSurfers.Scripts.Cheats;
 using SledSurfers.Scripts.Data.Providers;
 using SledSurfers.Scripts.Data.ScriptableObjects;
 using SledSurfers.Scripts.Extensions;
@@ -21,7 +22,10 @@ namespace SledSurfers.Scripts.Core
         [SerializeField] private LoadingScreen _loadingScreen;
         
         [Header("Debug")]
-        [SerializeField] private bool _loadFromServer; 
+        [SerializeField] private bool _loadFromServer;
+
+        [SerializeField] private bool _enableCheats = true;
+        [SerializeField] private CheatsMenu _cheatsMenuInstance;
 
         private async void Awake()
         {
@@ -32,6 +36,11 @@ namespace SledSurfers.Scripts.Core
         {
             _loadingScreen.Show();
             DontDestroyOnLoad(_loadingScreen);
+
+            if (_enableCheats)
+            {
+                SetupCheatsMenu();
+            }
             
             RegisterServices();
             await FetchPlayerData();
@@ -40,6 +49,13 @@ namespace SledSurfers.Scripts.Core
             _loadingScreen.Hide();
 
             SceneManager.UnloadSceneAsync(gameObject.scene);
+        }
+
+        private void SetupCheatsMenu()
+        {
+            var cheatsMenu = Instantiate(_cheatsMenuInstance);
+            DontDestroyOnLoad(cheatsMenu);
+            ServiceLocator.Register(cheatsMenu);
         }
         
 

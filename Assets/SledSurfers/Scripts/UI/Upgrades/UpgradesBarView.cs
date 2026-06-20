@@ -18,6 +18,7 @@ namespace SledSurfers.Scripts.UI.Upgrades
         {
             var numCards = _upgradeCards.Count;
             var manager = ServiceLocator.Get<UpgradesManager>();
+            var currencyManager = ServiceLocator.Get<CurrencyManager>();
             var availableUpgrades = manager.GetUpgradeAvailableTypes();
             var currentCardIndex = 0;
             foreach (var upgradeType in availableUpgrades)
@@ -30,7 +31,7 @@ namespace SledSurfers.Scripts.UI.Upgrades
                 
                 var card = _upgradeCards[currentCardIndex];
                 card.gameObject.SetActive(true);
-                card.Setup(upgradeType, manager);
+                card.Setup(upgradeType, manager, currencyManager);
                 currentCardIndex++;
             }
 

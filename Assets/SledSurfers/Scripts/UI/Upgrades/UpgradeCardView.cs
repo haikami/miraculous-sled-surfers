@@ -25,45 +25,28 @@ namespace SledSurfers.Scripts.UI.Upgrades
         
         private UpgradeType _upgradeType;
         private UpgradesManager _upgradesManager;
-        private bool _isSetup = false;
+        private CurrencyManager _currencyManager;
+        private bool _isSubscribedToEvents = false;
+        private bool IsSetup => _upgradesManager != null && _currencyManager != null;
 
-        public void Setup(UpgradeType upgradeType, UpgradesManager upgradesManager)
+        public void Setup(UpgradeType upgradeType, UpgradesManager upgradesManager, CurrencyManager currencyManager)
         {
             gameObject.SetActive(true);
-            _isSetup = true;
             _upgradeType = upgradeType;
             _upgradesManager = upgradesManager;
+            _currencyManager = currencyManager;
             SetupPersistentData();
+            RefreshContent();
+            TrySubscribe();
+        }
+        
+        private void RefreshContent()
+        {
             SetupCurrentValue();
             SetupUpgradeableContent();
         }
-
-        private void OnEnable()
-        {
-            if (ServiceLocator.TryGet(out CurrencyManager currencyManager))
-            {
-                currencyManager.OnCurrencyChanged += OnCurrencyChanged;
-            }
-
-            if (_isSetup)
-            {
-                SetupUpgradeableContent();
-            }
-        }
-
-        private void OnDisable()
-        {
-            if (ServiceLocator.TryGet(out CurrencyManager currencyManager))
-            {
-                currencyManager.OnCurrencyChanged -= OnCurrencyChanged;
-            }
-        }
-
-        private void OnCurrencyChanged(CurrencyType currencyType, int currencyAmount)
-        {
-            if (!_isSetup) return;
-            SetupUpgradeableContent();
-        }
+        
+        private void OnCurrencyChanged(CurrencyType currencyType, int currencyAmount) => SetupUpgradeableContent();
 
         public void OnUpgradeButtonClicked()
         {
@@ -101,6 +84,36 @@ namespace SledSurfers.Scripts.UI.Upgrades
             _maxUpgradeContent.SetActive(upgradeCostInfo.isMaxLevel);
             _upgradeableContent.SetActive(!upgradeCostInfo.isMaxLevel);
             _cost.text = $"{upgradeCostInfo.upgradeCost} {upgradeCostInfo.currencyType}";
+        }
+        
+        private void OnEnable()
+        {
+            TrySubscribe();
+            
+            if (IsSetup)
+            {
+                RefreshContent();
+            }
+        }
+        
+        private void OnDisable() => TryUnsubscribe();
+
+        private void TrySubscribe()
+        {
+            if (_isSubscribedToEvents || !IsSetup) return;
+
+            _currencyManager.OnCurrencyChanged += OnCurrencyChanged;
+            _upgradesManager.OnUpgradesReset += RefreshContent;
+            _isSubscribedToEvents = true;
+        }
+
+        private void TryUnsubscribe()
+        {
+            if (!_isSubscribedToEvents || !IsSetup) return;
+            
+            _currencyManager.OnCurrencyChanged -= OnCurrencyChanged;
+            _upgradesManager.OnUpgradesReset -= RefreshContent;
+            _isSubscribedToEvents = false;
         }
     }
 }

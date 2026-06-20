@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using SledSurfers.Scripts.Core;
 using SledSurfers.Scripts.Data.Models;
 using SledSurfers.Scripts.Data.ScriptableObjects;
 using SledSurfers.Scripts.Meta.Upgrades;
@@ -12,6 +11,8 @@ namespace SledSurfers.Scripts.Managers
         private readonly CurrencyManager _currencyManager;
         private readonly DataManager _dataManager;
         private readonly Dictionary<UpgradeType, UpgradeConfig> _upgrades = new();
+
+        public event Action OnUpgradesReset;
         
         public UpgradesManager(UpgradeListConfig upgradeListConfig, CurrencyManager currencyManager, DataManager dataManager)
         {
@@ -121,5 +122,11 @@ namespace SledSurfers.Scripts.Managers
         }
 
         public IEnumerable<UpgradeType> GetUpgradeAvailableTypes() => _upgrades.Keys;
+
+        public void ResetUpgrades()
+        {
+            _dataManager.ResetUpgrades();
+            OnUpgradesReset?.Invoke();
+        }
     }
 }

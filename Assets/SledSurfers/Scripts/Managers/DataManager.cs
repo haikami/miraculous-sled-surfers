@@ -48,5 +48,11 @@ namespace SledSurfers.Scripts.Managers
                 currentUpgradeData.level++;
             }
         }
+
+        public void ResetUpgrades()
+        {
+            PlayerData.upgrades.Clear();
+            SaveAsync();
+        }
     }
 }
