@@ -12,9 +12,11 @@ namespace SledSurfers.Scripts.Data.ScriptableObjects
         [SerializeField]private string _name;
         [SerializeField]private Sprite _icon;
         [SerializeField]private Color _color;
-        [SerializeField]private int _levelsPerMilestone;
-        [SerializeField] private float _initialValue;
-        [SerializeField]private List<UpgradeLevelData> _levels;
+        
+        [Header("Costs and values for each level")]
+        [SerializeField] private UpgradeCostListConfig _costListConfig;
+        [SerializeField] private UpgradeValuesListConfig _valuesListConfig;
+        
         [Header("How this value would show inside an upgrade card. Leave blank to not display any value")]
         [SerializeField] private string _displayValueFormat;
         
@@ -22,19 +24,17 @@ namespace SledSurfers.Scripts.Data.ScriptableObjects
         public string Name => _name;
         public Sprite Icon => _icon;
         public Color Color => _color;
-        public int LevelsPerMilestone => _levelsPerMilestone;
         public bool DisplayValue => !string.IsNullOrWhiteSpace(DisplayValueFormat);
         public string DisplayValueFormat =>  _displayValueFormat;
         
-        private int NumLevels => _levels.Count;
+        private int NumLevels => _valuesListConfig.NumLevels;
+        private int NumCosts => _costListConfig.NumCosts;
         
         
-        public bool IsMaxLevel(int level) => level >= NumLevels - 1;
+        public bool IsMaxLevel(int level) => level >= NumLevels;
         
-        public float GetUpgradeValue(int level)
-        => level < 0 || NumLevels == 0 ? _initialValue : level < NumLevels ? _levels[level].value : _levels[^1].value;
+        public float GetUpgradeValue(int level) => _valuesListConfig.GetValueAt(level);
 
-        public int GetUpgradeCost(int level)
-            => level > 0 && level < NumLevels ? _levels[level].cost : 0;
+        public int GetUpgradeCost(int level) => _costListConfig.GetValueAt(level);
     }
 }

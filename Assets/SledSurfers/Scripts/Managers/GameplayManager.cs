@@ -1,6 +1,7 @@
 ﻿using SledSurfers.Scripts.Core;
 using SledSurfers.Scripts.Data.Models;
 using SledSurfers.Scripts.Gameplay.Slingshot;
+using SledSurfers.Scripts.Meta.Upgrades;
 using SledSurfers.Scripts.Player;
 using UnityEngine;
 
@@ -49,7 +50,16 @@ namespace SledSurfers.Scripts.Managers
         {
             _cameraController.ToIdleView();
             _slingshotManager.BeginAiming();
+            ApplyUpgrades();
             _gameplayStateManager.SwitchState(GameplayState.Slingshot);
+        }
+
+        private void ApplyUpgrades()
+        {
+            var upgradeManager = ServiceLocator.Get<UpgradesManager>();
+            _playerManager.ApplyUpgrades(
+                upgradeManager.GetUpgradeCurrentValueOrDefault(UpgradeType.Slingshot), 
+                upgradeManager.GetUpgradeCurrentValueOrDefault(UpgradeType.Sled, 1f));
         }
     }
 }

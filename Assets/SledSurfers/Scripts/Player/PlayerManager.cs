@@ -7,6 +7,7 @@ using SledSurfers.Scripts.Gameplay.Utils;
 using SledSurfers.Scripts.Managers;
 using SledSurfers.Scripts.Meta.Upgrades;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace SledSurfers.Scripts.Player
 {
@@ -17,8 +18,9 @@ namespace SledSurfers.Scripts.Player
         [Header("Config")] 
         [SerializeField] private PlayerPhysicsConfig _config;
         
+        [FormerlySerializedAs("_controller")]
         [Header("Subsystems")]
-        [SerializeField] private PlayerController _controller;
+        [SerializeField] private PlayerLaunchController _launchController;
         [SerializeField] private PlayerMovementController _movement;
         [SerializeField] private PlayerTiltController _tilt;
         [SerializeField] private PlayerCollisionDetector _collision;
@@ -42,7 +44,7 @@ namespace SledSurfers.Scripts.Player
         
         public void Launch(Vector3 direction, float forcePercentage)
         {
-            _controller.Launch(direction, forcePercentage);
+            _launchController.Launch(direction, forcePercentage);
             _movement.StartListening();
             _tilt.StartRunning();
             _collision.StartListening();
@@ -60,7 +62,7 @@ namespace SledSurfers.Scripts.Player
             _movement.StopListening();
             _tilt.StopRunning();
             _collision.StopListening();
-            _controller.StopRunning();
+            _launchController.StopRunning();
             
             _momentumTracker.StopTracking();
             _distanceTracker.StopTracking();
@@ -79,15 +81,21 @@ namespace SledSurfers.Scripts.Player
         public void SetupPlayer(Transform spawnPoint)
         {
             _distanceTracker.SetStartPoint(spawnPoint);
-            _controller.ResetPlayer(spawnPoint);
+            _launchController.ResetPlayer(spawnPoint);
             ApplyConfig(_config);
         }
 
         private void ApplyConfig(PlayerPhysicsConfig config)
         {
             _tilt.SetConfig(config);
-            _controller.SetConfig(config);
+            _launchController.SetConfig(config);
             _momentumTracker.SetConfig(config);
+        }
+
+        public void ApplyUpgrades(float slingshotUpgradeValue, float sledUpgradeValue)
+        {
+            _launchController.SetExtraLaunchForceMultiplier(slingshotUpgradeValue);
+            _tilt.SetLateralForceMultiplier(sledUpgradeValue);
         }
     }
 }

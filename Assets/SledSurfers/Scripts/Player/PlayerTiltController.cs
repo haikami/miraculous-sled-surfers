@@ -18,11 +18,9 @@ namespace SledSurfers.Scripts.Player
         private float _lateralForceMultiplier = 1f;
         private float _normalizedX;
         private bool _hasPendingForce;
-
-        public void SetLateralForceMultiplier(float multiplier)
-        {
-            _lateralForceMultiplier = multiplier;
-        }
+        
+        public void SetLateralForceMultiplier(float value)
+        => _lateralForceMultiplier = value;
 
         public void StartRunning()
         {

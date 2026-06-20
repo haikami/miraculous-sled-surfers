@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace SledSurfers.Scripts.Player
 {
-    public class PlayerController : MonoBehaviour, IPlayerConfigSetter
+    public class PlayerLaunchController : MonoBehaviour, IPlayerConfigSetter
     {
         [Header("References")]
         [SerializeField] private Rigidbody _rigidbody;
@@ -12,12 +12,15 @@ namespace SledSurfers.Scripts.Player
         public float CurrentSpeed => _rigidbody.velocity.z;
 
         private float _baseLaunchForceMultiplier;
-        private float LaunchForceMultiplier => _baseLaunchForceMultiplier;
+        private float _extraLaunchForceMultiplier;
+        private float LaunchForceMultiplier => _baseLaunchForceMultiplier + _extraLaunchForceMultiplier;
 
         public void StopRunning()
         {
             _rigidbody.isKinematic = true;
         }
+        
+        public void SetExtraLaunchForceMultiplier(float value) => _extraLaunchForceMultiplier = value;
         
         public void ResetPlayer(Transform spawnPoint)
         {

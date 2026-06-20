@@ -9,14 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee939e4197414127922229c0384737a5, type: 3}
-  m_Name: DefaultPlayerPhysics
+  m_Script: {fileID: 11500000, guid: eba89642b46b40b199f965edf8caa478, type: 3}
+  m_Name: DefaultUpgradeCosts
   m_EditorClassIdentifier: 
-  _mass: 1
-  _linearDrag: 0.1
-  _angularDrag: 5
-  _baseLateralForce: 5
-  _maxLateralSpeed: 3
-  _maxDragDistance: 200
-  _baseLaunchForceMultiplier: 50
-  _minimumSpeedThreshold: 1.5
+  _upgradeCosts: 64000000c80000009001000020030000e8030000d0070000b80b0000ac0d0000a00f000088130000

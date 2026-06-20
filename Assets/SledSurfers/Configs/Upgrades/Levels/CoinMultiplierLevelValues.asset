@@ -9,14 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee939e4197414127922229c0384737a5, type: 3}
-  m_Name: DefaultPlayerPhysics
+  m_Script: {fileID: 11500000, guid: 2d44325a6dc1469fb891ac634beab77e, type: 3}
+  m_Name: CoinMultiplierLevelValues
   m_EditorClassIdentifier: 
-  _mass: 1
-  _linearDrag: 0.1
-  _angularDrag: 5
-  _baseLateralForce: 5
-  _maxLateralSpeed: 3
-  _maxDragDistance: 200
-  _baseLaunchForceMultiplier: 50
-  _minimumSpeedThreshold: 1.5
+  _levelsPerMilestone: 5
+  _initialValue: 1
+  _upgradeValues:
+  - 1.2
+  - 1.4
+  - 1.6
+  - 1.8
+  - 2
+  - 2.2
+  - 2.4
+  - 2.6
+  - 2.8
+  - 4

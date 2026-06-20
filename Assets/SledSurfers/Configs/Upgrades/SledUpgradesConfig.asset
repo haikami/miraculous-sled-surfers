@@ -10,13 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1c7beb7cb0b1450f8ad02363c42b9956, type: 3}
-  m_Name: CoinMultiplierConfig
+  m_Name: SledUpgradesConfig
   m_EditorClassIdentifier: 
-  _upgradeType: 0
-  _name: Income
+  _upgradeType: 2
+  _name: Sled
   _icon: {fileID: 0}
-  _color: {r: 1, g: 0.6941545, b: 0, a: 1}
-  _levelsPerMilestone: 5
+  _color: {r: 0, g: 0.7867758, b: 1, a: 1}
   _costListConfig: {fileID: 11400000, guid: 25aa2ccf7b095154191fa0210e7af6e6, type: 2}
-  _valuesListConfig: {fileID: 11400000, guid: 0f9ad9ee96c5c3a4d9bc5767781f17ed, type: 2}
-  _displayValueFormat: x{0:0.#}
+  _valuesListConfig: {fileID: 11400000, guid: faeec718776a4bf479bf2274b12b9110, type: 2}
+  _displayValueFormat: 

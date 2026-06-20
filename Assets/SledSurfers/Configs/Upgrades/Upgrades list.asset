@@ -13,4 +13,6 @@ MonoBehaviour:
   m_Name: Upgrades list
   m_EditorClassIdentifier: 
   _upgradesList:
+  - {fileID: 11400000, guid: ab426760af8a6e44f8e1015bbce6c7f8, type: 2}
+  - {fileID: 11400000, guid: 984d9c365541f484ebcf38f637884344, type: 2}
   - {fileID: 11400000, guid: 1c97e456d0d8f454c9f239016a472e79, type: 2}
