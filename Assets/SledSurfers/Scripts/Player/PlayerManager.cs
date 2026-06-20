@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SledSurfers.Scripts.Core;
 using SledSurfers.Scripts.Data.Models;
 using SledSurfers.Scripts.Data.ScriptableObjects;
@@ -29,7 +30,14 @@ namespace SledSurfers.Scripts.Player
         [SerializeField] private PlayerDistanceTracker _distanceTracker;
         
         private Vector3 _startPosition;
+        
+        private IPlayerConfigSetter[] _playerConfigSetters;
 
+        private void Awake()
+        {
+            _playerConfigSetters = GetComponentsInChildren<IPlayerConfigSetter>(true);
+        }
+        
         private void OnEnable()
         {
             _momentumTracker.OnMomentumLost += HandleFinishLostMomentum;
@@ -87,9 +95,10 @@ namespace SledSurfers.Scripts.Player
 
         private void ApplyConfig(PlayerPhysicsConfig config)
         {
-            _tilt.SetConfig(config);
-            _launchController.SetConfig(config);
-            _momentumTracker.SetConfig(config);
+            foreach (var playerConfigSetter in _playerConfigSetters)
+            {
+                playerConfigSetter.SetConfig(config);
+            }
         }
 
         public void ApplyUpgrades(float slingshotUpgradeValue, float sledUpgradeValue)
