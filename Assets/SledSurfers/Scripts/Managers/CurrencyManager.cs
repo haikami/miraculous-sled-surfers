@@ -26,6 +26,8 @@ namespace SledSurfers.Scripts.Managers
 
         public void Add(Dictionary<CurrencyType, int> currencies)
         {
+            if (currencies == null) return;
+            
             foreach (var currency in currencies)
             {
                 Add(currency.Key, currency.Value);

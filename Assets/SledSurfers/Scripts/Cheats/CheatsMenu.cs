@@ -17,7 +17,7 @@ namespace SledSurfers.Scripts.Cheats
         [SerializeField] private CheatButton _cheatInstance;
         private void Awake()
         {
-            _openCheatsButton.SetActive(true);
+            _openCheatsButton.SetActive(false);
             _cheatsMenu.SetActive(false);
             AddCheats();
         }
@@ -41,5 +41,10 @@ namespace SledSurfers.Scripts.Cheats
             AddCheat("Reset upgrades", () => ServiceLocator.Get<UpgradesManager>().ResetUpgrades());
         }
 
+        public void SetButtonVisibility(bool visible)
+        {
+            _openCheatsButton.SetActive(visible);
+            _cheatsMenu.SetActive(false);
+        }
     }
 }

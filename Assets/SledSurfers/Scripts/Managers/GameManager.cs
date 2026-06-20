@@ -14,44 +14,43 @@ namespace SledSurfers.Scripts.Managers
         [SerializeField] private CameraController _cameraController;
         [SerializeField] private PlayerManager _playerManager;
         
-        [Header("UI")] 
-        [SerializeField] private GameObject _playButton;
-        
         private DataManager _dataManager;
+        private GameStateManager _gameStateManager;
+        private RunResultManager _runResultManager;
+        private CurrencyManager _currencyManager;
+        private LevelManager _levelManager;
 
         private void Awake()
         {
             _dataManager = ServiceLocator.Get<DataManager>();
-            ServiceLocator.Get<LevelManager>().OnLevelLoaded += OnLevelLoaded;
+            _gameStateManager = ServiceLocator.Get<GameStateManager>();
+            _runResultManager = ServiceLocator.Get<RunResultManager>();
+            _currencyManager = ServiceLocator.Get<CurrencyManager>();
+            _levelManager = ServiceLocator.Get<LevelManager>();
+            
+            _levelManager.OnLevelLoaded += OnLevelLoaded;
         }
-
-        private void OnEnable()
-        {
-            _gameplayManager.OnGameFinished += FinishGame;
-        }
-
-        private void OnDisable()
-        {
-            _gameplayManager.OnGameFinished -= FinishGame;
-        }
-
 
         public void StartGame()
         {
-            _playButton.SetActive(false);
             _gameplayManager.StartGame();
+            _gameStateManager.SwitchState(GameState.Playing);
         }
 
-        private void FinishGame(FinishReason reason)
+        public void FinishGame()
         {
+            var runResult = _runResultManager.LastRunResultData;
+            _currencyManager.Add(runResult.currencies);
             _dataManager.SaveAsync();
-            if (reason == FinishReason.ReachedEnd)
+            _runResultManager.Clear();
+            
+            if (runResult.reason == FinishReason.ReachedEnd)
             {
-                //TODO: implement me
+                //TODO implement me
             }
             else
             {
-                ServiceLocator.Get<LevelManager>().ResetCurrentLevel();
+                _levelManager.ResetCurrentLevel();
             }
         }
 
@@ -66,7 +65,7 @@ namespace SledSurfers.Scripts.Managers
             var spawnPoint = levelDefinition.PlayerSpawnPoint;
             _cameraController.ToMainMenuView(spawnPoint);
             _playerManager.SetupPlayer(spawnPoint);
-            _playButton.SetActive(true);
+            _gameStateManager.SwitchState(GameState.MainMenu);
         }
     }
 }

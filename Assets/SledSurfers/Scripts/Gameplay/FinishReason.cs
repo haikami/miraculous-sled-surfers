@@ -2,6 +2,7 @@
 {
     public enum FinishReason
     {
+        NotStarted,
         LostMomentum,
         Crashed,
         ReachedEnd

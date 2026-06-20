@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using SledSurfers.Scripts.Core;
 using SledSurfers.Scripts.Data.Models;
+using SledSurfers.Scripts.Managers;
 using TMPro;
 using UnityEngine;
 
-namespace SledSurfers.Scripts.Gameplay.UI
+namespace SledSurfers.Scripts.UI
 {
     public class ResultView : MonoBehaviour
     {
@@ -15,17 +16,17 @@ namespace SledSurfers.Scripts.Gameplay.UI
         
         [SerializeField] private GameObject _gemsContainer;
         [SerializeField] private  TextMeshProUGUI _gemsText;
-        
-        private Action _onClosed;
-        
-        public void Show(RunResultData resultData, Action onClose)
+
+        private void OnEnable()
         {
-            _onClosed = onClose;
-            
+            var resultData = ServiceLocator.Get<RunResultManager>().LastRunResultData;
+            Setup(resultData);
+        }
+
+        private void Setup(RunResultData resultData)
+        {
             _distance.text = $"Distance: {resultData.distanceTraveled}m";
             SetupCurrencies(resultData.currencies);
-            
-            gameObject.SetActive(true);
         }
 
         private void SetupCurrencies(Dictionary<CurrencyType, int> currencies)
@@ -38,14 +39,6 @@ namespace SledSurfers.Scripts.Gameplay.UI
             
             _coinsText.text = $"Coins: {numCoins}";
             _coinsContainer.SetActive(numCoins > 0);
-            
-        }
-        
-        public void Close()
-        {
-            _onClosed?.Invoke();
-            _onClosed = null;
-            gameObject.SetActive(false);
         }
     }
 }

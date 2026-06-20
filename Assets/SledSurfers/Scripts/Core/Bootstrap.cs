@@ -63,11 +63,14 @@ namespace SledSurfers.Scripts.Core
         {
             ServiceLocator.Register(_loadingScreen);
             
-            var levelManager = new LevelManager();
-            ServiceLocator.Register(levelManager);
-            
             var gameStateManager = new GameStateManager();
             ServiceLocator.Register(gameStateManager);
+            
+            var gameplayStateManager = new GameplayStateManager();
+            ServiceLocator.Register(gameplayStateManager);
+            
+            var levelManager = new LevelManager();
+            ServiceLocator.Register(levelManager);
             
             var provider = BuildPlayerDataProvider();
             var dataManager = new DataManager(provider);
@@ -79,7 +82,7 @@ namespace SledSurfers.Scripts.Core
             var upgradesManager = new UpgradesManager(_upgradeListConfig, currencyManager, dataManager);
             ServiceLocator.Register(upgradesManager);
             
-            gameStateManager.Initialize();
+            ServiceLocator.Register(new RunResultManager());
         }
         
 
