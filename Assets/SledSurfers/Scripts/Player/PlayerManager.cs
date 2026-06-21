@@ -136,5 +136,14 @@ namespace SledSurfers.Scripts.Player
         {
             PlayerAnimationController.SetPlayingState();
         }
+
+        public void FinishGame()
+        {
+            _momentumTracker.StopTracking();
+            _movement.StopListening();
+            _tilt.StopRunning();
+            _collision.StopListening();
+            _launchController.StopRunning();
+        }
     }
 }

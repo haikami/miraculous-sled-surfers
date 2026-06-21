@@ -1,6 +1,7 @@
 ﻿using SledSurfers.Scripts.Core;
 using SledSurfers.Scripts.Data.Models;
 using SledSurfers.Scripts.Gameplay;
+using SledSurfers.Scripts.Gameplay.Cameras;
 using SledSurfers.Scripts.Gameplay.Level;
 using SledSurfers.Scripts.Gameplay.Slingshot;
 using SledSurfers.Scripts.Gameplay.Utils;
@@ -74,15 +75,17 @@ namespace SledSurfers.Scripts.Managers
             }
         }
         
-        public void StartGame()
+        public void PrepareForGameStart()
         {
-            _cameraController.ToIdleView();
-            _slingshotManager.BeginAiming();
             _playerManager.SetPlayerPlayingState();
             ApplyUpgrades();
             StartListeningLevelEndTrigger();
-            _gameplayStateManager.SwitchState(GameplayState.Slingshot);
+        }
 
+        public void StartAiming()
+        {
+            _slingshotManager.BeginAiming();
+            _gameplayStateManager.SwitchState(GameplayState.Slingshot);
         }
 
         private void ApplyUpgrades()
@@ -91,6 +94,13 @@ namespace SledSurfers.Scripts.Managers
             _playerManager.ApplyUpgrades(
                 upgradeManager.GetUpgradeCurrentValueOrDefault(UpgradeType.Slingshot), 
                 upgradeManager.GetUpgradeCurrentValueOrDefault(UpgradeType.Sled, 1f));
+        }
+
+        public void FinishGame()
+        {
+            _slingshotManager.StopAiming();
+            _playerManager.FinishGame();
+            _gameplayStateManager.SwitchState(GameplayState.None);
         }
     }
 }

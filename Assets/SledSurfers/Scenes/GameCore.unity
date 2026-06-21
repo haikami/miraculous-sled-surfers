@@ -402,9 +402,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerTransform: {fileID: 1133623479}
-  _idleOffset: {x: 0, y: 4, z: -8}
-  _mainMenuOffset: {x: 0, y: 4, z: 8}
-  _smoothSpeed: 5
+  _camera: {fileID: 0}
+  _playerMomentumTracker: {fileID: 0}
+  _mainMenuOrbit:
+    angle: 180
+    distance: 4
+    height: 3
+  _idleOrbit:
+    angle: 0
+    distance: 8
+    height: 4
+  _followOffset: {x: 0, y: 4, z: -8}
+  _orbitBlendSpeed: 6
+  _positionSmoothSpeed: 10
+  _rotationSmoothSpeed: 20
+  _baseFov: 60
+  _maxFov: 75
+  _speedForMaxFov: 20
+  _fovSmoothSpeed: 4
 --- !u!1 &999311292 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6910556132013891259, guid: 5b2146ec181915149bf91fa0bacf7bfe, type: 3}

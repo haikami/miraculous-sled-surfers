@@ -2,6 +2,7 @@
 using SledSurfers.Scripts.Cheats;
 using SledSurfers.Scripts.Core;
 using SledSurfers.Scripts.Gameplay;
+using SledSurfers.Scripts.Gameplay.Cameras;
 using SledSurfers.Scripts.Gameplay.Level;
 using SledSurfers.Scripts.Player;
 using UnityEngine;
@@ -42,8 +43,16 @@ namespace SledSurfers.Scripts.Managers
 
         public void StartGame()
         {
-            _gameplayManager.StartGame();
+            _cameraController.OnTransitionCompleted += OnCameraSettled;
+            _cameraController.ToIdleView();
+            _gameplayManager.PrepareForGameStart();
             _gameStateManager.SwitchState(GameState.Playing);
+        }
+
+        private void OnCameraSettled()
+        {
+            _cameraController.OnTransitionCompleted -= OnCameraSettled;
+            _gameplayManager.StartAiming();
         }
 
         public void FinishGame()
@@ -51,16 +60,30 @@ namespace SledSurfers.Scripts.Managers
             var runResult = _runResultManager.LastRunResultData;
             _runResultManager.Clear();
             _currencyManager.Add(runResult.currencies);
+            _gameplayManager.FinishGame();
             
-            if (runResult.reason == FinishReason.ReachedEnd)
+            switch (runResult.reason)
             {
-                LoadNextLevel();
-            }
-            else
-            {
-                _dataManager.UpdateMaxDistanceIfHigher(runResult.distanceTraveled);
-                _dataManager.SaveAsync();
-                _levelManager.ResetCurrentLevel();
+                case FinishReason.NotStarted:
+                {
+                    _levelManager.ResetCurrentLevel();
+                }
+                    break;
+                case FinishReason.LostMomentum:
+                case FinishReason.Crashed:
+                {
+                    _dataManager.UpdateMaxDistanceIfHigher(runResult.distanceTraveled);
+                    _dataManager.SaveAsync();
+                    _levelManager.ResetCurrentLevel();
+                }
+                    break;
+                case FinishReason.ReachedEnd:
+                {
+                    LoadNextLevel();
+                }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -83,7 +106,7 @@ namespace SledSurfers.Scripts.Managers
             }
 
             var spawnPoint = levelDefinition.PlayerSpawnPoint;
-            _cameraController.ToMainMenuView(spawnPoint);
+            _cameraController.SnapToMainMenuView(spawnPoint);
             _playerManager.SetupPlayer(spawnPoint);
             _gameStateManager.SwitchState(GameState.MainMenu);
         }
