@@ -1,4 +1,5 @@
 ﻿using System;
+using SledSurfers.Scripts.Cheats;
 using SledSurfers.Scripts.Core;
 using SledSurfers.Scripts.Gameplay;
 using SledSurfers.Scripts.Gameplay.Level;
@@ -29,6 +30,9 @@ namespace SledSurfers.Scripts.Managers
             _currencyManager = ServiceLocator.Get<CurrencyManager>();
             _levelManager = ServiceLocator.Get<LevelManager>();
             _upgradesManager = ServiceLocator.Get<UpgradesManager>();
+            
+            //Example on how to dynamically add cheats, it will only happen if menu is instantiated during preload
+            ServiceLocator.Get<CheatsMenu>()?.AddCheat("Load Next Level", LoadNextLevel);
             
             _levelManager.OnLevelLoaded += OnLevelLoaded;
         }
