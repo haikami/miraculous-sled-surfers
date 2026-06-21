@@ -18,5 +18,8 @@ MonoBehaviour:
   _baseLateralForce: 5
   _maxLateralSpeed: 3
   _maxDragDistance: 200
-  _baseLaunchForceMultiplier: 50
-  _minimumSpeedThreshold: 1.5
+  _baseLaunchForceMultiplier: 30
+  _minimumSpeedThreshold: 2
+  _maxGrazeAngle: 50
+  _defaultMomentumPenalty: 0.4
+  _hardObstaclesAlwaysCrash: 1

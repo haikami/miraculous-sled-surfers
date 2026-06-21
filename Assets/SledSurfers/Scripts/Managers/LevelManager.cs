@@ -47,7 +47,6 @@ namespace SledSurfers.Scripts.Managers
             _currentLevelScene = null;
         }
 
-        //TODO: cleanup whatever is needed
         public void ResetCurrentLevel()
         {
             var scene = SceneManager.GetSceneByName(_currentLevelScene);
