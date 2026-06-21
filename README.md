@@ -11,6 +11,7 @@ Untiy 2022.3.62f3
 ## Notes
 - Tested and developed on Windows targetting android platform
 - Visual polish and level design: all the elements present in the gameplay are for showcasing purposes, I prioritized architecture and code cleanness over visual integration. 
+- Game balance is still being refined. A cheat/debug menu is included to facilitate testing upgrades and other gameplay features.
 
 # Architecture
 
