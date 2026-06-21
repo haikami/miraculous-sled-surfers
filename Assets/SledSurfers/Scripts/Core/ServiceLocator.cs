@@ -27,7 +27,7 @@ namespace SledSurfers.Scripts.Core
             if (_services.TryGetValue(type, out var service))
                 return service as T;
 
-            throw new InvalidOperationException($"[ServiceLocator] Service not registered: {type.Name}");
+            throw new InvalidOperationException($"[ServiceLocator] Service not registered: {type.Name}, use TryGet for accessing services that might not be present");
         }
 
         public static bool TryGet<T>(out T service) where T : class

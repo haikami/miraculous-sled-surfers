@@ -32,7 +32,10 @@ namespace SledSurfers.Scripts.Managers
             _upgradesManager = ServiceLocator.Get<UpgradesManager>();
             
             //Example on how to dynamically add cheats, it will only happen if menu is instantiated during preload
-            ServiceLocator.Get<CheatsMenu>()?.AddCheat("Load Next Level", LoadNextLevel);
+            if (ServiceLocator.TryGet(out CheatsMenu cheatsMenu))
+            {
+                cheatsMenu.AddCheat("Load Next Level", LoadNextLevel);
+            }
             
             _levelManager.OnLevelLoaded += OnLevelLoaded;
         }
