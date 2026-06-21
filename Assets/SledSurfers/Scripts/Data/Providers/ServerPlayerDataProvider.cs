@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using SledSurfers.Scripts.Data.Models;
+using UnityEngine;
 
 namespace SledSurfers.Scripts.Data.Providers
 {
@@ -31,6 +32,7 @@ namespace SledSurfers.Scripts.Data.Providers
         
         private async Task<PlayerData> FetchFromServerAsync(CancellationToken ct)
         {
+            Debug.LogWarning("Server player data fetcher not implemented, throwing a timeout exception to emulate not reaching the servers");
             await Task.Delay(100, ct);
             throw new TimeoutException();
         }

@@ -17,6 +17,8 @@ namespace SledSurfers.Scripts.Core
         
         [Header("Configs")]
         [SerializeField] private UpgradeListConfig _upgradeListConfig;
+
+        [SerializeField] private LevelProgressionConfig _levelProgressionConfig;
         
         [Header("References")]
         [SerializeField] private LoadingScreen _loadingScreen;
@@ -73,7 +75,7 @@ namespace SledSurfers.Scripts.Core
             ServiceLocator.Register(levelManager);
             
             var provider = BuildPlayerDataProvider();
-            var dataManager = new DataManager(provider);
+            var dataManager = new DataManager(provider, _levelProgressionConfig);
             ServiceLocator.Register(dataManager);
 
             var currencyManager = new CurrencyManager(dataManager);

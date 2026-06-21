@@ -152,6 +152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _upgradeListConfig: {fileID: 11400000, guid: 73883866615de0e4c9e4185649e7332c, type: 2}
+  _levelProgressionConfig: {fileID: 11400000, guid: d5ac71561211b724b883c6e610192f7f, type: 2}
   _loadingScreen: {fileID: 1853134592}
   _loadFromServer: 1
   _enableCheats: 1

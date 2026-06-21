@@ -1,6 +1,9 @@
 ﻿using SledSurfers.Scripts.Core;
 using SledSurfers.Scripts.Data.Models;
+using SledSurfers.Scripts.Gameplay;
+using SledSurfers.Scripts.Gameplay.Level;
 using SledSurfers.Scripts.Gameplay.Slingshot;
+using SledSurfers.Scripts.Gameplay.Utils;
 using SledSurfers.Scripts.Meta.Upgrades;
 using SledSurfers.Scripts.Player;
 using UnityEngine;
@@ -32,10 +35,19 @@ namespace SledSurfers.Scripts.Managers
             _slingshotManager.OnReleased -= OnSlingshotReleased;
             _playerManager.OnRunEnded -= OnRunEnded;
         }
+
+        private void OnRunSucceeded() => OnRunEnded(
+            new RunResultData
+            {
+                reason = FinishReason.ReachedEnd,
+                currencies = PlayerLevelRewardsCalculator.GetLevelCompletedRewards()
+            });
         
         private void OnRunEnded(RunResultData runResultData)
         {
             ServiceLocator.Get<RunResultManager>().SetLastRunResultData(runResultData);
+            StopListeningLevelEndTrigger();
+            _cameraController.StopFollowing();
             _gameplayStateManager.SwitchState(GameplayState.GameOver);
         }
 
@@ -45,13 +57,31 @@ namespace SledSurfers.Scripts.Managers
             _playerManager.Launch(direction, forcePercentage);
             _gameplayStateManager.SwitchState(GameplayState.Running);
         }
+
+        private void StartListeningLevelEndTrigger()
+        {
+            if (ServiceLocator.TryGet(out LevelDefinition levelDefinition))
+            {
+                levelDefinition.LevelEndTrigger.OnLevelEndReached += OnRunSucceeded;
+            }
+        }
+
+        private void StopListeningLevelEndTrigger()
+        {
+            if (ServiceLocator.TryGet(out LevelDefinition levelDefinition))
+            {
+                levelDefinition.LevelEndTrigger.OnLevelEndReached -= OnRunSucceeded;
+            }
+        }
         
         public void StartGame()
         {
             _cameraController.ToIdleView();
             _slingshotManager.BeginAiming();
             ApplyUpgrades();
+            StartListeningLevelEndTrigger();
             _gameplayStateManager.SwitchState(GameplayState.Slingshot);
+
         }
 
         private void ApplyUpgrades()

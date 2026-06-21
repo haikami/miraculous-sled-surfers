@@ -29,10 +29,8 @@ public class CameraController : MonoBehaviour
         transform.LookAt(Target);
     }
 
-    public void StartFollowing()
-    {
-        _following = true;
-    }
+    public void StartFollowing() => _following = true;
+    public void StopFollowing() => _following = false;
     
     void LateUpdate()
     {
@@ -47,4 +45,5 @@ public class CameraController : MonoBehaviour
 
         transform.LookAt(Target);
     }
+
 }

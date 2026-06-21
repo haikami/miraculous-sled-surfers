@@ -38,7 +38,11 @@ namespace SledSurfers.Scripts.Cheats
                 ServiceLocator.Get<CurrencyManager>()?.Reset(CurrencyType.Gems);
             });
             
-            AddCheat("Reset upgrades", () => ServiceLocator.Get<UpgradesManager>().ResetUpgrades());
+            AddCheat("Reset upgrades", () =>
+            {
+                ServiceLocator.Get<UpgradesManager>().ResetUpgrades();
+                ServiceLocator.Get<DataManager>().SaveAsync();
+            });
         }
 
         public void SetButtonVisibility(bool visible)

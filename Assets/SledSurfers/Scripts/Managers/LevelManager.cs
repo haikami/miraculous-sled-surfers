@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using SledSurfers.Scripts.Core;
 using SledSurfers.Scripts.Extensions;
+using SledSurfers.Scripts.Gameplay.Level;
 using UnityEngine.SceneManagement;
 
 namespace SledSurfers.Scripts.Managers
@@ -48,7 +50,8 @@ namespace SledSurfers.Scripts.Managers
         //TODO: cleanup whatever is needed
         public void ResetCurrentLevel()
         {
-            var scene   = SceneManager.GetSceneByName(_currentLevelScene);
+            var scene = SceneManager.GetSceneByName(_currentLevelScene);
+            ServiceLocator.Get<LevelDefinition>()?.LevelEndTrigger?.Reset();
             OnLevelLoaded?.Invoke();
         }
     }

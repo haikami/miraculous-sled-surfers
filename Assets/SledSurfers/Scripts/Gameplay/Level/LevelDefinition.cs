@@ -8,10 +8,12 @@ namespace SledSurfers.Scripts.Gameplay.Level
 {
     public class LevelDefinition : MonoBehaviour
     {
+        [SerializeField] private LevelEndTrigger _levelEndTrigger;
         [SerializeField] private Transform _playerSpawnPoint;
         [SerializeField] private GameObject _collectableMarkersParent;
         
         public Transform PlayerSpawnPoint => _playerSpawnPoint;
+        public LevelEndTrigger LevelEndTrigger => _levelEndTrigger;
 
         public List<CollectableData> GetCollectableData()
         {

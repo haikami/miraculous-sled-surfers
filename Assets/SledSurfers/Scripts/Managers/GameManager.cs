@@ -19,6 +19,7 @@ namespace SledSurfers.Scripts.Managers
         private RunResultManager _runResultManager;
         private CurrencyManager _currencyManager;
         private LevelManager _levelManager;
+        private UpgradesManager _upgradesManager;
 
         private void Awake()
         {
@@ -27,6 +28,7 @@ namespace SledSurfers.Scripts.Managers
             _runResultManager = ServiceLocator.Get<RunResultManager>();
             _currencyManager = ServiceLocator.Get<CurrencyManager>();
             _levelManager = ServiceLocator.Get<LevelManager>();
+            _upgradesManager = ServiceLocator.Get<UpgradesManager>();
             
             _levelManager.OnLevelLoaded += OnLevelLoaded;
         }
@@ -40,18 +42,29 @@ namespace SledSurfers.Scripts.Managers
         public void FinishGame()
         {
             var runResult = _runResultManager.LastRunResultData;
-            _currencyManager.Add(runResult.currencies);
-            _dataManager.SaveAsync();
             _runResultManager.Clear();
+            _currencyManager.Add(runResult.currencies);
             
             if (runResult.reason == FinishReason.ReachedEnd)
             {
-                //TODO implement me
+                LoadNextLevel();
             }
             else
             {
+                _dataManager.UpdateMaxDistanceIfHigher(runResult.distanceTraveled);
+                _dataManager.SaveAsync();
                 _levelManager.ResetCurrentLevel();
             }
+        }
+
+        private void LoadNextLevel()
+        {
+            _dataManager.SetNextLevelData();
+            _currencyManager.ResetLevelCurrencies();
+            _upgradesManager.ResetUpgrades();
+            _dataManager.SaveAsync();
+            //Fire and forget since loading level triggers and event
+            _levelManager.LoadLevelAsync(_dataManager.CurrentLevel);
         }
 
         private void OnLevelLoaded()

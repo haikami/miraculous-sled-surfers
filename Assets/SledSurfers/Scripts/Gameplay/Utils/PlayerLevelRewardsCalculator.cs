@@ -15,7 +15,8 @@ namespace SledSurfers.Scripts.Gameplay.Utils
             return rewards;
         }
         
-        public static Dictionary<CurrencyType, int> GetLevelCompletedRewards(int level)
+        //TODO: this could have its own config based on the completed level
+        public static Dictionary<CurrencyType, int> GetLevelCompletedRewards()
         {
             var rewards = new Dictionary<CurrencyType, int>
             {
