@@ -78,6 +78,7 @@ namespace SledSurfers.Scripts.Managers
         {
             _cameraController.ToIdleView();
             _slingshotManager.BeginAiming();
+            _playerManager.SetPlayerPlayingState();
             ApplyUpgrades();
             StartListeningLevelEndTrigger();
             _gameplayStateManager.SwitchState(GameplayState.Slingshot);

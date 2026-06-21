@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SledSurfers.Scripts.Cheats;
 using SledSurfers.Scripts.Core;
 using SledSurfers.Scripts.Data.Models;
 using SledSurfers.Scripts.Data.ScriptableObjects;
@@ -18,6 +19,7 @@ namespace SledSurfers.Scripts.Player
 
         [Header("Config")] 
         [SerializeField] private PlayerPhysicsConfig _config;
+        [SerializeField] private CharacterConfigList _availableCharactersConfig;
         
         [FormerlySerializedAs("_controller")]
         [Header("Subsystems")]
@@ -25,7 +27,8 @@ namespace SledSurfers.Scripts.Player
         [SerializeField] private PlayerMovementController _movement;
         [SerializeField] private PlayerTiltController _tilt;
         [SerializeField] private PlayerCollisionDetector _collision;
-        
+        [SerializeField] private PlayerCharacterLoader _characterLoader;
+        [Space]
         [SerializeField] private PlayerMomentumTracker _momentumTracker;
         [SerializeField] private PlayerDistanceTracker _distanceTracker;
         
@@ -33,21 +36,42 @@ namespace SledSurfers.Scripts.Player
         
         private IPlayerConfigSetter[] _playerConfigSetters;
 
+        private PlayerAnimationController PlayerAnimationController => _characterLoader.AnimationController;
+
         private void Awake()
         {
             _playerConfigSetters = GetComponentsInChildren<IPlayerConfigSetter>(true);
+            SetupVisuals();
+        }
+
+        private void SetupVisuals()
+        {
+            _characterLoader.LoadCharacter(_availableCharactersConfig.GetCharacterOrDefault(CharacterType.Lady));
+            if (ServiceLocator.TryGet(out CheatsMenu cheatsMenu))
+            {
+                cheatsMenu.AddCheat("Cycle characters",
+                    () => _characterLoader.LoadCharacter(
+                        _availableCharactersConfig.GetNextCharacterConfig(_characterLoader.CurrentCharacterConfig)));
+            }
         }
         
         private void OnEnable()
         {
             _momentumTracker.OnMomentumLost += HandleFinishLostMomentum;
             _collision.OnObstacleHit += HandleFinishObstacleHit;
+            _movement.OnGroundStateChanged += HandleGroundStateChanged;
+        }
+
+        private void HandleGroundStateChanged(bool isGrounded)
+        {
+            PlayerAnimationController.SetAirborne(!isGrounded);
         }
 
         private void OnDisable()
         {
             _momentumTracker.OnMomentumLost -= HandleFinishLostMomentum;
             _collision.OnObstacleHit -= HandleFinishObstacleHit;
+            _movement.OnGroundStateChanged -= HandleGroundStateChanged;
         }
         
         public void Launch(Vector3 direction, float forcePercentage)
@@ -88,6 +112,7 @@ namespace SledSurfers.Scripts.Player
 
         public void SetupPlayer(Transform spawnPoint)
         {
+            PlayerAnimationController.SetIdleState();
             _distanceTracker.SetStartPoint(spawnPoint);
             _launchController.ResetPlayer(spawnPoint);
             ApplyConfig(_config);
@@ -105,6 +130,11 @@ namespace SledSurfers.Scripts.Player
         {
             _launchController.SetExtraLaunchForceMultiplier(slingshotUpgradeValue);
             _tilt.SetLateralForceMultiplier(sledUpgradeValue);
+        }
+
+        public void SetPlayerPlayingState()
+        {
+            PlayerAnimationController.SetPlayingState();
         }
     }
 }
