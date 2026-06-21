@@ -4,6 +4,7 @@ using SledSurfers.Scripts.Core;
 using SledSurfers.Scripts.Gameplay;
 using SledSurfers.Scripts.Gameplay.Cameras;
 using SledSurfers.Scripts.Gameplay.Level;
+using SledSurfers.Scripts.Gameplay.Slingshot;
 using SledSurfers.Scripts.Player;
 using UnityEngine;
 
@@ -15,6 +16,7 @@ namespace SledSurfers.Scripts.Managers
         [SerializeField] private GameplayManager _gameplayManager;
         [SerializeField] private CameraController _cameraController;
         [SerializeField] private PlayerManager _playerManager;
+        [SerializeField] private SlingshotManager _slingshotManager;
         
         private DataManager _dataManager;
         private GameStateManager _gameStateManager;
@@ -108,6 +110,7 @@ namespace SledSurfers.Scripts.Managers
             var spawnPoint = levelDefinition.PlayerSpawnPoint;
             _cameraController.SnapToMainMenuView(spawnPoint);
             _playerManager.SetupPlayer(spawnPoint);
+            _slingshotManager.SetupSlingshot();
             _gameStateManager.SwitchState(GameState.MainMenu);
         }
     }

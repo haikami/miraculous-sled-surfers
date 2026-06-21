@@ -249,53 +249,6 @@ MonoBehaviour:
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
   m_ScrollDeltaPerTick: 6
---- !u!1 &803127702
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 803127704}
-  - component: {fileID: 803127703}
-  m_Layer: 0
-  m_Name: Slingshot
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &803127703
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 803127702}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd11767d2860451e95f2e42c364c8537, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _playerManager: {fileID: 1133623486}
-  _input: {fileID: 1494066949}
-  _config: {fileID: 11400000, guid: db7d40a8bc463d94cac1d59b29c84301, type: 2}
---- !u!4 &803127704
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 803127702}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.6, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -486,6 +439,7 @@ MonoBehaviour:
   _gameplayManager: {fileID: 1252716804}
   _cameraController: {fileID: 963194229}
   _playerManager: {fileID: 1133623486}
+  _slingshotManager: {fileID: 4228300413152846779}
 --- !u!4 &1252716803
 Transform:
   m_ObjectHideFlags: 0
@@ -513,7 +467,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3b80d55162842f487aee5e062e62353, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slingshotManager: {fileID: 803127703}
+  _slingshotManager: {fileID: 4228300413152846779}
   _playerManager: {fileID: 1133623486}
   _cameraController: {fileID: 963194229}
 --- !u!1 &1494066948
@@ -880,6 +834,86 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8428930455047916265, guid: 17959d2df8bd35743bdf1547c2bbc026, type: 3}
   m_PrefabInstance: {fileID: 3672218763240061336}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &4228300413152846778
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2053133554803108398, guid: 45da2544b6c3fdf4fac1ca52e6f59f63, type: 3}
+      propertyPath: _playerVisual
+      value: 
+      objectReference: {fileID: 1133623479}
+    - target: {fileID: 2382617728748511860, guid: 45da2544b6c3fdf4fac1ca52e6f59f63, type: 3}
+      propertyPath: m_Name
+      value: Slingshot
+      objectReference: {fileID: 0}
+    - target: {fileID: 4012212140866301445, guid: 45da2544b6c3fdf4fac1ca52e6f59f63, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4012212140866301445, guid: 45da2544b6c3fdf4fac1ca52e6f59f63, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4012212140866301445, guid: 45da2544b6c3fdf4fac1ca52e6f59f63, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4012212140866301445, guid: 45da2544b6c3fdf4fac1ca52e6f59f63, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4012212140866301445, guid: 45da2544b6c3fdf4fac1ca52e6f59f63, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4012212140866301445, guid: 45da2544b6c3fdf4fac1ca52e6f59f63, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4012212140866301445, guid: 45da2544b6c3fdf4fac1ca52e6f59f63, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4012212140866301445, guid: 45da2544b6c3fdf4fac1ca52e6f59f63, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4012212140866301445, guid: 45da2544b6c3fdf4fac1ca52e6f59f63, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4012212140866301445, guid: 45da2544b6c3fdf4fac1ca52e6f59f63, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7058495058544644657, guid: 45da2544b6c3fdf4fac1ca52e6f59f63, type: 3}
+      propertyPath: _input
+      value: 
+      objectReference: {fileID: 1494066949}
+    - target: {fileID: 7058495058544644657, guid: 45da2544b6c3fdf4fac1ca52e6f59f63, type: 3}
+      propertyPath: _playerManager
+      value: 
+      objectReference: {fileID: 1133623486}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 45da2544b6c3fdf4fac1ca52e6f59f63, type: 3}
+--- !u!114 &4228300413152846779 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7058495058544644657, guid: 45da2544b6c3fdf4fac1ca52e6f59f63, type: 3}
+  m_PrefabInstance: {fileID: 4228300413152846778}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd11767d2860451e95f2e42c364c8537, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5142129286845463525
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -954,5 +988,5 @@ SceneRoots:
   - {fileID: 1494066950}
   - {fileID: 1252716803}
   - {fileID: 5142129286845463525}
-  - {fileID: 803127704}
   - {fileID: 66322176}
+  - {fileID: 4228300413152846778}

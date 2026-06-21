@@ -10,11 +10,12 @@ namespace SledSurfers.Scripts.Gameplay.Slingshot
 {
     public class SlingshotManager : MonoBehaviour
     {
+        [SerializeField] private SlingshotConfig _config;
         [Header("References")]
         [SerializeField] private PlayerManager _playerManager;
         [SerializeField] private DragInputDetector _input;
-        [SerializeField] private SlingshotConfig _config;
-     
+        [SerializeField] private SlingshotRope _slingshotRope;
+        
         public event Action<Vector3, float> OnReleased;
         public event Action OnAimingCancelled;
         public event Action<float> OnPullPercentageChanged;
@@ -22,6 +23,11 @@ namespace SledSurfers.Scripts.Gameplay.Slingshot
         private Transform _anchorPoint;
         private Camera _camera;
 
+        public void SetupSlingshot()
+        {
+            _slingshotRope.StartListening();
+        }
+        
         public void BeginAiming()
         {
             _anchorPoint = ServiceLocator.Get<LevelDefinition>()?.PlayerSpawnPoint;
@@ -29,6 +35,7 @@ namespace SledSurfers.Scripts.Gameplay.Slingshot
             _input.OnDragged += HandleDragged;
             _input.OnDragReleased += HandleDragReleased;
             _input.Enable();
+
         }
 
         public void StopAiming()
@@ -36,6 +43,7 @@ namespace SledSurfers.Scripts.Gameplay.Slingshot
             _input.Disable();
             _input.OnDragged -= HandleDragged;
             _input.OnDragReleased -= HandleDragReleased;
+            _slingshotRope.StopListening();
         }
 
         private void HandleDragged(Vector2 screenOffset)
