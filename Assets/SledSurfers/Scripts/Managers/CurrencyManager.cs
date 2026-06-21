@@ -57,7 +57,6 @@ namespace SledSurfers.Scripts.Managers
             var newAmount = Mathf.Max(0, currentAmount + amount);
             currencySource.SetAmount(currencyType, newAmount);
             OnCurrencyChanged?.Invoke(currencyType, newAmount);
-            Debug.Log($"Currency {currencyType} updated: {newAmount}");
         }
 
         public int GetAmount(CurrencyType type)
