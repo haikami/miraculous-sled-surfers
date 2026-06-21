@@ -24,9 +24,12 @@ namespace SledSurfers.Scripts.Player
         
         public void ResetPlayer(Transform spawnPoint)
         {
-            _rigidbody.isKinematic = true;
-            _rigidbody.velocity = Vector3.zero;
-            _rigidbody.angularVelocity = Vector3.zero;
+            if (!_rigidbody.isKinematic)
+            {
+                _rigidbody.velocity = Vector3.zero;
+                _rigidbody.angularVelocity = Vector3.zero;    
+                _rigidbody.isKinematic = true;
+            }
 
             _rigidbody.position = spawnPoint.position;
             _rigidbody.rotation = spawnPoint.rotation;
