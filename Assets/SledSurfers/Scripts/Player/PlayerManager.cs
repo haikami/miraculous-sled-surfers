@@ -46,7 +46,7 @@ namespace SledSurfers.Scripts.Player
 
         private void SetupVisuals()
         {
-            _characterLoader.LoadCharacter(_availableCharactersConfig.GetCharacterOrDefault(CharacterType.Lady));
+            _characterLoader.LoadCharacter(_availableCharactersConfig.GetCharacterOrDefault(CharacterType.AstroCat));
             if (ServiceLocator.TryGet(out CheatsMenu cheatsMenu))
             {
                 cheatsMenu.AddCheat("Cycle characters",
