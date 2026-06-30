@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _upgradeType: 1
   _name: Slingshot
-  _icon: {fileID: 0}
-  _color: {r: 1, g: 0.17251457, b: 0, a: 1}
+  _icon: {fileID: 21300000, guid: 84521266d230e6e42afff41c624e5f8d, type: 3}
+  _color: {r: 0.9960785, g: 0.38823533, b: 0.43137258, a: 1}
   _costListConfig: {fileID: 11400000, guid: 25aa2ccf7b095154191fa0210e7af6e6, type: 2}
   _valuesListConfig: {fileID: 11400000, guid: af09f865a7cfe2a4b9f8a4ac7ebde30d, type: 2}
   _displayValueFormat: 

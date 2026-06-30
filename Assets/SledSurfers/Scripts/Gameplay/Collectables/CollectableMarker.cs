@@ -21,6 +21,8 @@ namespace SledSurfers.Scripts.Gameplay.Collectables
                 spawnPosition = transform.position
             };
         
+#if UNITY_EDITOR
+        
         private static readonly Dictionary<CurrencyType, Color> _gizmoColors = new()
         {
             { CurrencyType.Coins, Color.yellow },
@@ -38,6 +40,6 @@ namespace SledSurfers.Scripts.Gameplay.Collectables
                 $"{_currencyType} x{_currencyAmount}"
             );
         }
-
+ #endif
     }
 }

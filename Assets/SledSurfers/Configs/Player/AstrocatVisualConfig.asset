@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 607e282207bd4e90986164743b1d459c, type: 3}
+  m_Name: AstroCatVisualConfig
+  m_EditorClassIdentifier: 
+  _type: 1
+  _characterVisualPrefab: {fileID: 2161358824891695205, guid: 5b66171c9697ffe44aa29e15f18cd444, type: 3}
+  _displayName: Astro cat
+  _portrait: {fileID: 0}

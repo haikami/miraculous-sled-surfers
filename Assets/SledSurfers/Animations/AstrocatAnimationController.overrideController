@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: AstrocatAnimationController
+  m_Controller: {fileID: 9100000, guid: 8ebd191b62bc8664292479070b7306cc, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: eb378590cdab96e41a08dab81781bc4a, type: 3}
+    m_OverrideClip: {fileID: 1827226128182048838, guid: ff70758653b20d44d98ec502827465de, type: 3}
+  - m_OriginalClip: {fileID: 7400000, guid: ec4a6acf8da75a34d8d853e0e6b18094, type: 3}
+    m_OverrideClip: {fileID: -6618425373156884287, guid: 1bb1f081a42736846bd93722f2341f4d, type: 3}
+  - m_OriginalClip: {fileID: 7400000, guid: bed4a17a94aa0ee409136acdf5df48cf, type: 3}
+    m_OverrideClip: {fileID: -6800218571209303685, guid: 1bb1f081a42736846bd93722f2341f4d, type: 3}
+  - m_OriginalClip: {fileID: 7400000, guid: 8ab68d81a72ef9d4ab92edab8652baf7, type: 3}
+    m_OverrideClip: {fileID: -1224519128610008317, guid: db6793971e6728044bb7634f88e6eb55, type: 3}
+  - m_OriginalClip: {fileID: 7400000, guid: d76a2423f6839d942b36729393fe0d18, type: 3}
+    m_OverrideClip: {fileID: -623690572189157295, guid: 1bb1f081a42736846bd93722f2341f4d, type: 3}

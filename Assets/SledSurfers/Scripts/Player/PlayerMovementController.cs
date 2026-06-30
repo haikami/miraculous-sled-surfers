@@ -5,107 +5,95 @@ namespace SledSurfers.Scripts.Player
 {
     public class PlayerMovementController : MonoBehaviour
     {
-        [Header("References")] 
+        public event Action<bool> OnGroundStateChanged;
+
+        [Header("References")]
         [SerializeField] private Rigidbody _rigidbody;
 
         [Header("Settings")]
-        [SerializeField] private float _accelerationForce = 200f;
         [SerializeField] private float _rotationSpeed = 8f;
         [SerializeField] private float _groundCheckDistance = 5f;
+        [SerializeField] private float _landingPredictionDistance = 50f;
         [SerializeField] private LayerMask _groundMask;
 
+        private bool _isRunning;
         private bool _isGrounded;
         private Vector3 _groundNormal = Vector3.up;
-        
-        private bool _isRunning;
 
         private void Awake()
         {
-            // Let the Rigidbody handle translation only.
             _rigidbody.freezeRotation = true;
             _rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
             _rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
         }
 
-
         public void StartListening()
         {
             _isRunning = true;
+            ResetGroundState();
         }
 
         public void StopListening()
         {
             _isRunning = false;
+            ResetGroundState();
         }
-        
+
+        private void ResetGroundState()
+        {
+            var wasGrounded = _isGrounded;
+            _isGrounded = true;
+            _groundNormal = Vector3.up;
+
+            _rigidbody.rotation = Quaternion.LookRotation(transform.forward, Vector3.up);
+
+            if (!wasGrounded)
+                OnGroundStateChanged?.Invoke(true);
+        }
+
         private void FixedUpdate()
         {
             if (!_isRunning) return;
-            
+
             UpdateGroundInfo();
             UpdateRotation();
         }
 
         private void UpdateGroundInfo()
         {
-            RaycastHit hit;
-
+            var wasGrounded = _isGrounded;
             _isGrounded = Physics.Raycast(
                 transform.position,
                 Vector3.down,
-                out hit,
+                out var hit,
                 _groundCheckDistance,
                 _groundMask);
 
-            if (_isGrounded)
-            {
-                _groundNormal = hit.normal;
-            }
+            _groundNormal = _isGrounded ? hit.normal : Vector3.up;
+
+            if (wasGrounded != _isGrounded)
+                OnGroundStateChanged?.Invoke(_isGrounded);
         }
 
         private void UpdateRotation()
         {
-            Vector3 velocity = _rigidbody.velocity;
+            var velocity = _rigidbody.velocity;
+            if (velocity.sqrMagnitude < 0.1f) return;
 
-            // Ignore tiny velocities
-            if (velocity.sqrMagnitude < 0.1f)
-                return;
+            var forward = velocity.normalized;
+            var up = _isGrounded ? _groundNormal : PredictLandingNormal();
 
-            Vector3 forward = velocity.normalized;
-            Vector3 up;
+            var targetRotation = Quaternion.LookRotation(forward, up);
+            var newRotation = Quaternion.Slerp(_rigidbody.rotation, targetRotation, _rotationSpeed * Time.fixedDeltaTime);
 
-            if (_isGrounded)
-            {
-                // Follow the actual ground.
-                up = _groundNormal;
-            }
-            else
-            {
-                // Predict the landing surface.
-                RaycastHit hit;
+            _rigidbody.MoveRotation(newRotation);
+        }
 
-                if (Physics.Raycast(
-                        transform.position,
-                        Vector3.down,
-                        out hit,
-                        50f,
-                        _groundMask))
-                {
-                    up = hit.normal;
-                }
-                else
-                {
-                    up = Vector3.up;
-                }
-            }
-
-            Quaternion targetRotation =
-                Quaternion.LookRotation(forward, up);
-
-            transform.rotation = Quaternion.Slerp(
-                transform.rotation,
-                targetRotation,
-                _rotationSpeed * Time.fixedDeltaTime);
+        private Vector3 PredictLandingNormal()
+        {
+            return Physics.Raycast(transform.position, Vector3.down, out var hit, _landingPredictionDistance, _groundMask)
+                ? hit.normal
+                : Vector3.up;
         }
     }
 }

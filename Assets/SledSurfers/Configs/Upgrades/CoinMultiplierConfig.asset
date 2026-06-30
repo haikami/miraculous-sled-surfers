@@ -14,9 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _upgradeType: 0
   _name: Income
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 7db960d2c85d29443970a0b3239c0875, type: 3}
   _color: {r: 1, g: 0.6941545, b: 0, a: 1}
-  _levelsPerMilestone: 5
   _costListConfig: {fileID: 11400000, guid: 25aa2ccf7b095154191fa0210e7af6e6, type: 2}
   _valuesListConfig: {fileID: 11400000, guid: 0f9ad9ee96c5c3a4d9bc5767781f17ed, type: 2}
   _displayValueFormat: x{0:0.#}
